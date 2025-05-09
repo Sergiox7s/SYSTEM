@@ -1,13 +1,14 @@
 
 package Interfaz.Docente;
 
-import Interfaz.Docente.VistaDocente;
 import Modelo.Entidades.Usuario;
-import Servicio.GestionIncidente;
 import Modelo.DAO.TicketDAO;
 import Interfaz.LoginPanel;
+import java.awt.Image;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import proyectoFinal.gestionTickets.Main;
@@ -30,6 +31,7 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
          lbNomUsuario.setText(u.getNombre() + " " + u.getApellido());
          textNombreUserConectado.setText(usuario.getNombre());
          textApellidoUserConectado.setText(usuario.getApellido());
+        SetImageLabel(jLabel1, "/Img/imgDocente.jpg");
     }
 
     public void mostrarFecha() {
@@ -89,6 +91,7 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
         textDescripcion = new javax.swing.JTextArea();
         lbMenu = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -116,26 +119,29 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
         jSeparator15.setForeground(new java.awt.Color(204, 204, 204));
         jPanel2.add(jSeparator15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 1000, 10));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255, 150));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel27.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel27.setForeground(new java.awt.Color(0, 0, 0));
         jLabel27.setText("APELLIDOS:");
+        jPanel3.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 91, -1, 24));
 
         textApellidoUserConectado.setEditable(false);
         textApellidoUserConectado.setBackground(new java.awt.Color(255, 255, 255));
         textApellidoUserConectado.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         textApellidoUserConectado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel3.add(textApellidoUserConectado, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 119, 279, -1));
 
         textNombreUserConectado.setEditable(false);
         textNombreUserConectado.setBackground(new java.awt.Color(255, 255, 255));
         textNombreUserConectado.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         textNombreUserConectado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         textNombreUserConectado.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jPanel3.add(textNombreUserConectado, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 56, 279, -1));
 
         jLabel31.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel31.setForeground(new java.awt.Color(0, 0, 0));
         jLabel31.setText("NOMBRE:");
+        jPanel3.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 28, -1, 24));
 
         btnCrearTicket.setBackground(new java.awt.Color(0, 102, 204));
         btnCrearTicket.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -148,6 +154,7 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
                 btnCrearTicketActionPerformed(evt);
             }
         });
+        jPanel3.add(btnCrearTicket, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 255, 160, 40));
 
         btnCancelar.setBackground(new java.awt.Color(51, 51, 51));
         btnCancelar.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -160,74 +167,31 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
                 btnCancelarActionPerformed(evt);
             }
         });
+        jPanel3.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 332, 160, 44));
 
         jLabel25.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
         jLabel25.setForeground(new java.awt.Color(51, 51, 51));
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel25.setText("NUMERO DE CONTACTO:");
+        jPanel3.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 157, -1, 24));
 
-        textCelular.setBackground(new java.awt.Color(255, 255, 255));
         textCelular.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
-        textCelular.setForeground(new java.awt.Color(0, 0, 0));
         textCelular.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel31)
-                            .addComponent(jLabel27)
-                            .addComponent(jLabel25)
-                            .addComponent(textNombreUserConectado, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
-                            .addComponent(textApellidoUserConectado)
-                            .addComponent(textCelular)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnCrearTicket, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(25, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(textNombreUserConectado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(4, 4, 4)
-                .addComponent(textApellidoUserConectado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(textCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48)
-                .addComponent(btnCrearTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(104, Short.MAX_VALUE))
-        );
+        jPanel3.add(textCelular, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 187, 279, -1));
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 310, 480));
 
-        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255, 150));
         jPanel6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 204)));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel24.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel24.setForeground(new java.awt.Color(0, 0, 0));
         jLabel24.setText("AULA:");
+        jPanel6.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 33, -1, -1));
 
-        textAula.setBackground(new java.awt.Color(255, 255, 255));
         textAula.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
-        textAula.setForeground(new java.awt.Color(0, 0, 0));
         textAula.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel6.add(textAula, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 54, 168, -1));
 
         textFecha.setEditable(false);
         textFecha.setBackground(new java.awt.Color(255, 255, 255));
@@ -235,14 +199,13 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
         textFecha.setForeground(new java.awt.Color(102, 102, 102));
         textFecha.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         textFecha.setBorder(null);
+        jPanel6.add(textFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(397, 33, 210, 44));
 
         jLabel23.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel23.setForeground(new java.awt.Color(0, 0, 0));
         jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel23.setText("TIPO DE INCIDENCIA:");
+        jPanel6.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 118, -1, 24));
 
-        cbCategoria.setBackground(new java.awt.Color(255, 255, 255));
-        cbCategoria.setForeground(new java.awt.Color(0, 0, 0));
         cbCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "---", " " }));
         cbCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         cbCategoria.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -250,60 +213,18 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
                 cbCategoriaMouseClicked(evt);
             }
         });
+        jPanel6.add(cbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 148, 560, -1));
 
         jLabel21.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel21.setForeground(new java.awt.Color(0, 0, 0));
         jLabel21.setText("DESCRIPCION (*)");
+        jPanel6.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 204, 90, -1));
 
-        textDescripcion.setBackground(new java.awt.Color(255, 255, 255));
         textDescripcion.setColumns(20);
-        textDescripcion.setForeground(new java.awt.Color(0, 0, 0));
         textDescripcion.setRows(5);
         textDescripcion.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jScrollPane2.setViewportView(textDescripcion);
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel23)
-                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbCategoria, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
-                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel6Layout.createSequentialGroup()
-                                    .addComponent(jLabel24)
-                                    .addGap(140, 140, 140))
-                                .addComponent(textAula, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(textFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(42, 42, 42))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(textFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jLabel24)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(textAula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(41, 41, 41)
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(jLabel21)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(36, Short.MAX_VALUE))
-        );
+        jPanel6.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 225, 560, 193));
 
         jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, 650, 460));
 
@@ -321,6 +242,10 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
         jLabel14.setForeground(new java.awt.Color(0, 102, 204));
         jLabel14.setText("Nuevo Ticket");
         jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 170, 30));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/imgDocente.jpg"))); // NOI18N
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1100, 540));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1100, 610));
 
@@ -426,11 +351,16 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_lbSalirSistemaMouseClicked
 
-
+    public void SetImageLabel(JLabel label, String path) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        label.setIcon(new ImageIcon(img));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnCrearTicket;
     private javax.swing.JComboBox<String> cbCategoria;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel21;

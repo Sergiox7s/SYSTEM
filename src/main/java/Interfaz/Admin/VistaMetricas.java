@@ -8,7 +8,10 @@ import Modelo.Entidades.Empleado;
 import Modelo.Entidades.Usuario;
 import Servicio.GestionCategoria;
 import Servicio.GestionIncidente;
+import java.awt.Image;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import static proyectoFinal.gestionTickets.Main.usuario;
 
@@ -36,7 +39,7 @@ public class VistaMetricas extends javax.swing.JFrame {
                 mostrarHistorialEmpleado();
             }
         });
-
+        SetImageLabel(jLabel1, "/Img/fondoBlanco.jpg");
     }
 
     private void actualizarEmpleados() {
@@ -157,6 +160,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         textIncidentes = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jSeparator18 = new javax.swing.JSeparator();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -246,10 +250,8 @@ public class VistaMetricas extends javax.swing.JFrame {
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setBorder(null);
-        jScrollPane1.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 204)));
 
-        tableHistorial.setBackground(new java.awt.Color(255, 255, 255));
         tableHistorial.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         tableHistorial.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         tableHistorial.setForeground(new java.awt.Color(0, 102, 204));
@@ -284,17 +286,13 @@ public class VistaMetricas extends javax.swing.JFrame {
         jLabel23.setText("Selecciona una categoria");
         jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
 
-        cbCategoria.setBackground(new java.awt.Color(255, 255, 255));
-        cbCategoria.setForeground(new java.awt.Color(0, 0, 0));
         cbCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel2.add(cbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 340, -1));
 
         jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setBorder(null);
-        jScrollPane2.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 204)));
 
-        tableListaEmpleado.setBackground(new java.awt.Color(255, 255, 255));
         tableListaEmpleado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         tableListaEmpleado.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         tableListaEmpleado.setForeground(new java.awt.Color(0, 102, 204));
@@ -362,7 +360,6 @@ public class VistaMetricas extends javax.swing.JFrame {
         jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 130, 90));
 
         jLabel25.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel25.setForeground(new java.awt.Color(0, 0, 0));
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel25.setText("ID Empleado:");
         jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 400, -1, -1));
@@ -377,7 +374,6 @@ public class VistaMetricas extends javax.swing.JFrame {
         jPanel2.add(txtIdEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 400, 170, 20));
 
         jLabel32.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel32.setForeground(new java.awt.Color(0, 0, 0));
         jLabel32.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel32.setText("Celular:");
         jPanel2.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 520, 70, 20));
@@ -392,7 +388,6 @@ public class VistaMetricas extends javax.swing.JFrame {
         jPanel2.add(txtCelular, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 520, 170, -1));
 
         jLabel33.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel33.setForeground(new java.awt.Color(0, 0, 0));
         jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel33.setText("Nombres:");
         jPanel2.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 440, 70, 20));
@@ -454,7 +449,6 @@ public class VistaMetricas extends javax.swing.JFrame {
         jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 490, 130, 90));
 
         jLabel26.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
-        jLabel26.setForeground(new java.awt.Color(0, 0, 0));
         jLabel26.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel26.setText("Estado:");
         jPanel2.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 480, 70, -1));
@@ -619,6 +613,9 @@ public class VistaMetricas extends javax.swing.JFrame {
         jSeparator18.setForeground(new java.awt.Color(204, 204, 204));
         jPanel2.add(jSeparator18, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 720, 10));
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/fondoBlanco.jpg"))); // NOI18N
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 610));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -684,11 +681,17 @@ public class VistaMetricas extends javax.swing.JFrame {
     private void btActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btActualizarActionPerformed
 
     }//GEN-LAST:event_btActualizarActionPerformed
-
+    
+    public void SetImageLabel(JLabel label, String path) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        label.setIcon(new ImageIcon(img));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btActualizar;
     private javax.swing.JComboBox<Categoria> cbCategoria;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;

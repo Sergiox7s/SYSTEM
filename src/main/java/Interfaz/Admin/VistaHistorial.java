@@ -12,6 +12,9 @@ import Interfaz.LoginPanel;
 import Modelo.Entidades.Categoria;
 import Modelo.Entidades.Usuario;
 import Servicio.GestionCategoria;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import static proyectoFinal.gestionTickets.Main.usuario;
 
@@ -27,7 +30,7 @@ public class VistaHistorial extends javax.swing.JFrame {
         lbNomUsuario.setText(usuario.getNombre() + " " + usuario.getApellido());
         cargarHistorial();
         gestionCategoria.mostrarCategorias(cbCategoria);
-
+        SetImageLabel(jLabel1, "/Img/palacioBlanco.jpg");
     }
 
     private void cargarHistorial() {
@@ -64,6 +67,7 @@ public class VistaHistorial extends javax.swing.JFrame {
         jLabel24 = new javax.swing.JLabel();
         cbCategoria = new javax.swing.JComboBox<>();
         btActualizar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -198,10 +202,8 @@ public class VistaHistorial extends javax.swing.JFrame {
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setBorder(null);
-        jScrollPane1.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 204)));
 
-        tableHistorial.setBackground(new java.awt.Color(255, 255, 255));
         tableHistorial.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         tableHistorial.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         tableHistorial.setForeground(new java.awt.Color(0, 102, 204));
@@ -250,7 +252,6 @@ public class VistaHistorial extends javax.swing.JFrame {
         jLabel11.setText("Buscar ID de Ticket");
         jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 230, 20));
 
-        textBuscarTicket.setBackground(new java.awt.Color(255, 255, 255));
         textBuscarTicket.setForeground(new java.awt.Color(51, 51, 51));
         textBuscarTicket.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel2.add(textBuscarTicket, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 110, 300, 30));
@@ -274,8 +275,6 @@ public class VistaHistorial extends javax.swing.JFrame {
         jLabel24.setText("Seleccionar Categoria");
         jPanel2.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 90, -1, -1));
 
-        cbCategoria.setBackground(new java.awt.Color(255, 255, 255));
-        cbCategoria.setForeground(new java.awt.Color(0, 0, 0));
         cbCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         jPanel2.add(cbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 110, 390, 30));
 
@@ -291,6 +290,9 @@ public class VistaHistorial extends javax.swing.JFrame {
             }
         });
         jPanel2.add(btActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 100, 160, 40));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/fondoBlanco.jpg"))); // NOI18N
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 610));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -378,12 +380,17 @@ public class VistaHistorial extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btActualizarActionPerformed
 
-
+    public void SetImageLabel(JLabel label, String path) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        label.setIcon(new ImageIcon(img));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btActualizar;
     private javax.swing.JButton btnBuscarTicket;
     private javax.swing.JButton btnVerDetalle;
     private javax.swing.JComboBox<Categoria> cbCategoria;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;

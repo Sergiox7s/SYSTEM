@@ -7,12 +7,15 @@ import Modelo.DAO.EmpleadoDAO;
 import Servicio.GestionIncidente;
 import Interfaz.LoginPanel;
 import Modelo.Entidades.Incidente;
+import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Queue;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
@@ -87,7 +90,7 @@ public class VistaColaIncidente extends javax.swing.JFrame {
                 }
             }
         });
-
+        SetImageLabel(jLabel1, "/Img/borealblanco.jpg");
     }
 
     public void mostrarFecha() {
@@ -226,6 +229,7 @@ public class VistaColaIncidente extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         lbTicketID = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         lbSalirSistema = new javax.swing.JLabel();
@@ -239,13 +243,12 @@ public class VistaColaIncidente extends javax.swing.JFrame {
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setBorder(null);
-        jScrollPane1.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 204)));
 
-        tableColaTickets.setBackground(new java.awt.Color(255, 255, 255));
         tableColaTickets.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         tableColaTickets.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         tableColaTickets.setForeground(new java.awt.Color(0, 102, 204));
@@ -272,13 +275,16 @@ public class VistaColaIncidente extends javax.swing.JFrame {
         tableColaTickets.setShowGrid(false);
         jScrollPane1.setViewportView(tableColaTickets);
 
-        cbEmpleados.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(52, 200, 998, 371));
+
         cbEmpleados.setForeground(new java.awt.Color(51, 51, 51));
         cbEmpleados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        jPanel2.add(cbEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(397, 72, 358, -1));
 
         jLabel12.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(51, 51, 51));
         jLabel12.setText("ASIGNAR A:");
+        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(397, 41, -1, -1));
 
         btnAsignar.setBackground(new java.awt.Color(0, 102, 204));
         btnAsignar.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
@@ -293,6 +299,7 @@ public class VistaColaIncidente extends javax.swing.JFrame {
                 btnAsignarActionPerformed(evt);
             }
         });
+        jPanel2.add(btnAsignar, new org.netbeans.lib.awtextra.AbsoluteConstraints(397, 134, 166, 49));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(51, 51, 51), 2));
@@ -310,6 +317,8 @@ public class VistaColaIncidente extends javax.swing.JFrame {
         jLabel2.setText("FINALIZADOS");
         jPanel4.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 110, 40));
 
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(838, 143, 212, -1));
+
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 0, 51), 2));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -325,6 +334,8 @@ public class VistaColaIncidente extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel4.setText("EN ESPERA");
         jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 110, 40));
+
+        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(838, 34, 212, -1));
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(134, 173, 17), 2));
@@ -342,6 +353,8 @@ public class VistaColaIncidente extends javax.swing.JFrame {
         jLabel6.setText("ASIGNADOS");
         jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 110, 40));
 
+        jPanel2.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(838, 86, 212, 45));
+
         btActualizar.setBackground(new java.awt.Color(134, 173, 17));
         btActualizar.setForeground(new java.awt.Color(255, 255, 255));
         btActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
@@ -353,11 +366,14 @@ public class VistaColaIncidente extends javax.swing.JFrame {
                 btActualizarActionPerformed(evt);
             }
         });
+        jPanel2.add(btActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(612, 134, 143, 49));
 
         lbFecha.setFont(new java.awt.Font("Poppins", 0, 18)); // NOI18N
         lbFecha.setForeground(new java.awt.Color(153, 153, 153));
+        jPanel2.add(lbFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(52, 25, 315, 30));
 
         lblEstadoEmpleado.setText("---");
+        jPanel2.add(lblEstadoEmpleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(397, 106, 144, -1));
 
         jPanel3.setBackground(new java.awt.Color(153, 0, 0));
 
@@ -389,71 +405,13 @@ public class VistaColaIncidente extends javax.swing.JFrame {
                 .addComponent(jLabel30)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lbTicketID, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(52, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 998, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lbFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblEstadoEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnAsignar, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(49, 49, 49)
-                                .addComponent(btActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel12)
-                            .addComponent(cbEmpleados, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                            .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(50, 50, 50))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lbFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(cbEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblEstadoEmpleado)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnAsignar, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(17, 17, 17)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39))
-        );
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(52, 69, -1, -1));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/llanuraBlanca.jpg"))); // NOI18N
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -3, 1100, 610));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1100, 610));
 
@@ -591,12 +549,17 @@ public class VistaColaIncidente extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_lbVistaMetricasMouseClicked
-
+    public void SetImageLabel(JLabel label, String path) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        label.setIcon(new ImageIcon(img));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btActualizar;
     private javax.swing.JButton btnAsignar;
     private javax.swing.JComboBox<Empleado> cbEmpleados;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;

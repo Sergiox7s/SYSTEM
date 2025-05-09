@@ -3,6 +3,9 @@ package Interfaz.Docente;
 import Modelo.DAO.TicketDAO;
 import Interfaz.LoginPanel;
 import Modelo.Entidades.Usuario;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import proyectoFinal.gestionTickets.Main;
 
@@ -21,7 +24,7 @@ public class VistaDocente extends javax.swing.JFrame {
          
           // Cargar los tickets del usuario al iniciar
         cargarTicketsUsuario(u.getId());
-
+        SetImageLabel(jLabel1, "/Img/institucion.jpg");
     }
     
     public void cargarTicketsUsuario(int idUsuario) {
@@ -46,6 +49,7 @@ public class VistaDocente extends javax.swing.JFrame {
         btnAgregarTicket = new javax.swing.JButton();
         lbMenu = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lbSalirSistema = new javax.swing.JLabel();
         lbNomUsuario = new javax.swing.JLabel();
@@ -60,10 +64,8 @@ public class VistaDocente extends javax.swing.JFrame {
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setBorder(null);
-        jScrollPane1.setForeground(new java.awt.Color(0, 0, 0));
         jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 102, 204)));
 
-        tableTicketUserConectado.setBackground(new java.awt.Color(255, 255, 255));
         tableTicketUserConectado.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         tableTicketUserConectado.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
         tableTicketUserConectado.setForeground(new java.awt.Color(0, 102, 204));
@@ -119,7 +121,6 @@ public class VistaDocente extends javax.swing.JFrame {
         jSeparator15.setForeground(new java.awt.Color(204, 204, 204));
         jPanel2.add(jSeparator15, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 1000, 10));
 
-        textBuscarTicket.setBackground(new java.awt.Color(255, 255, 255));
         textBuscarTicket.setForeground(new java.awt.Color(51, 51, 51));
         textBuscarTicket.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         textBuscarTicket.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -170,6 +171,10 @@ public class VistaDocente extends javax.swing.JFrame {
         jLabel13.setForeground(new java.awt.Color(0, 102, 204));
         jLabel13.setText("Mis Tickets");
         jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 30, 170, 30));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/institucion.jpg"))); // NOI18N
+        jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 610));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1100, 610));
 
@@ -270,12 +275,17 @@ public class VistaDocente extends javax.swing.JFrame {
     private void textBuscarTicketKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textBuscarTicketKeyReleased
         
     }//GEN-LAST:event_textBuscarTicketKeyReleased
-    
+    public void SetImageLabel(JLabel label, String path) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        label.setIcon(new ImageIcon(img));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarTicket;
     private javax.swing.JButton btnBorrarTicket;
     private javax.swing.JButton btnBuscarTicket;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
