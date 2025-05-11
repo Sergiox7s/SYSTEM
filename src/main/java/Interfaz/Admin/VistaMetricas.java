@@ -287,6 +287,11 @@ public class VistaMetricas extends javax.swing.JFrame {
         jPanel2.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 80, -1, -1));
 
         cbCategoria.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        cbCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCategoriaActionPerformed(evt);
+            }
+        });
         jPanel2.add(cbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, 340, -1));
 
         jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
@@ -681,6 +686,10 @@ public class VistaMetricas extends javax.swing.JFrame {
     private void btActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btActualizarActionPerformed
 
     }//GEN-LAST:event_btActualizarActionPerformed
+
+    private void cbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbCategoriaActionPerformed
     
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));

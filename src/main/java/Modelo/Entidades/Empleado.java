@@ -13,6 +13,8 @@ public class Empleado {
     private String celular;
     private int totalIncidentes;
     private int promedioRespuesta;
+    //private boolean disponibilidad=false;if(disponibilidad==true){ autoasignaciondeTicketcs()}
+    
 
     public Empleado(int idEmpleado, String nombre, String apellido, Modelo.Entidades.Categoria Categoria, String estado, LocalDateTime fechaEstado) {
         this.idEmpleado = idEmpleado;

@@ -279,6 +279,11 @@ public class VistaColaIncidente extends javax.swing.JFrame {
 
         cbEmpleados.setForeground(new java.awt.Color(51, 51, 51));
         cbEmpleados.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
+        cbEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbEmpleadosActionPerformed(evt);
+            }
+        });
         jPanel2.add(cbEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(397, 72, 358, -1));
 
         jLabel12.setFont(new java.awt.Font("Tw Cen MT", 0, 12)); // NOI18N
@@ -549,6 +554,10 @@ public class VistaColaIncidente extends javax.swing.JFrame {
 
         this.dispose();
     }//GEN-LAST:event_lbVistaMetricasMouseClicked
+
+    private void cbEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEmpleadosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbEmpleadosActionPerformed
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));
         Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
