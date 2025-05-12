@@ -38,6 +38,11 @@
             <artifactId>datechooser</artifactId>
             <version>SNAPSHOT</version>
         </dependency>
+        <dependency>
+        <groupId>org.jdesktop.animation</groupId>
+        <artifactId>timingframework-swing</artifactId>
+        <version>5.0.0</version>
+    </dependency>
     </dependencies>
 
     <properties>
