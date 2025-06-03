@@ -6,6 +6,7 @@ package Interfaz.SoporteEquipo;
 
 import Modelo.DAO.TicketDAO;
 import Modelo.Entidades.Empleado;
+import Modelo.Entidades.Usuario;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,19 +18,19 @@ import javax.swing.JLabel;
  */
 public class VistaEmpleado extends java.awt.Frame {
 
-    Empleado emple=new Empleado();
+    Usuario u = new Usuario();
     TicketDAO gestionTicket;
     
     
     
-    public VistaEmpleado(Empleado empleado) {
-        this.emple=empleado;
+    public VistaEmpleado(Usuario usuario) {
+        this.u = usuario;
         initComponents();
         
         
         gestionTicket = new TicketDAO();
-        lblNombreEmpleado.setText(emple.getNombre() + " " + emple.getApellido()); 
-        cargarTicketsUsuario(emple.getIdEmpleado());
+        lblNombreEmpleado.setText(u.getNombre() + " " + u.getApellido()); 
+        cargarTicketsUsuario(u.getId());
         
         
         SetImageLabel(jLabel1, "/Img/apoyoicon.png");

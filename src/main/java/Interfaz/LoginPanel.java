@@ -3,6 +3,7 @@ package Interfaz;
 
 import Interfaz.Docente.VistaDocente;
 import Interfaz.Admin.VistaColaIncidente;
+import Interfaz.SoporteEquipo.VistaEmpleado;
 import Modelo.Entidades.Usuario;
 import Modelo.DAO.UsuarioDAO;
 import java.awt.Image;
@@ -221,13 +222,18 @@ public class LoginPanel extends javax.swing.JFrame {
                     ap.setLocationRelativeTo(null);
                     this.dispose();
 
-                } else {
+                }else if(u.getRol().equals("usuario")){
 
                     VistaDocente up = new VistaDocente(Main.usuario);
                     up.setVisible(true);
                     up.setLocationRelativeTo(null);
                     this.dispose();
 
+                }else if(u.getRol().equals("empleado")){
+                    VistaEmpleado emple = new VistaEmpleado(Main.usuario);
+                    emple.setVisible(true);
+                    emple.setLocationRelativeTo(null);
+                    this.dispose();
                 }
 
             } else {
