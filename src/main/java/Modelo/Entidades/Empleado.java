@@ -13,16 +13,18 @@ public class Empleado {
     private String celular;
     private int totalIncidentes;
     private int promedioRespuesta;
+    private int id_usuario;
     //private boolean disponibilidad=false;if(disponibilidad==true){ autoasignaciondeTicketcs()}
     
 
-    public Empleado(int idEmpleado, String nombre, String apellido, Modelo.Entidades.Categoria Categoria, String estado, LocalDateTime fechaEstado) {
+    public Empleado(int idEmpleado, String nombre, String apellido, Modelo.Entidades.Categoria Categoria, String estado, LocalDateTime fechaEstado, int id_usuario) {
         this.idEmpleado = idEmpleado;
         this.nombre = nombre;
         this.apellido = apellido;
         this.Categoria = Categoria;
         this.estado = estado;
         this.fechaEstado = fechaEstado;
+        this.id_usuario=id_usuario;
     }
 
     public Empleado(int idEmpleado, String nombre) {
@@ -49,6 +51,10 @@ public class Empleado {
         this.totalIncidentes = totalIncidentes;
         this.promedioRespuesta = promedioRespuesta;
     }
+
+    public Empleado() {
+    }
+    
 
     public int getIdEmpleado() {
         return idEmpleado;
