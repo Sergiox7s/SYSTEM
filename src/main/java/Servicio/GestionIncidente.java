@@ -3,6 +3,7 @@ package Servicio;
 import Modelo.Entidades.Incidente;
 import Modelo.DAO.IncidenteDAO;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class GestionIncidente {
@@ -38,6 +39,14 @@ public class GestionIncidente {
 
     public int obtenerConteoIncidentesAsignados() {
         return incidenteDAO.obtenerConteoIncidentesAsignados();
+    }
+
+    public int obtenerConteoIncidentesAsignadosPorUsuario(int idUsuario) {
+        return incidenteDAO.obtenerConteoIncidentesAsignadosPorUsuario(idUsuario);
+    }
+
+    public List<Incidente> obtenerIncidentesAsignadosPorUsuario(int idUsuario) {
+        return incidenteDAO.obtenerIncidentesAsignadosPorUsuario(idUsuario);
     }
 
     public int obtenerConteoIncidentesFinalizados() {

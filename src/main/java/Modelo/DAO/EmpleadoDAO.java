@@ -170,6 +170,35 @@ public class EmpleadoDAO {
     }
 
 
+
+        public Empleado obtenerEmpleadoPorUsuario(int idUsuario) {
+            Empleado empleado = null;
+            Conexiondb conexion = new Conexiondb();
+            Connection con = conexion.establecerConexion();
+
+            String query = "SELECT id_empleado, nombre, apellido, id_categoria, estado FROM empleado WHERE id_usuario = ?";
+
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setInt(1, idUsuario);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    empleado = new Empleado();
+                    empleado.setIdEmpleado(rs.getInt("id_empleado"));
+                    empleado.setNombre(rs.getString("nombre"));
+                    empleado.setApellido(rs.getString("apellido"));
+                    empleado.setEstado(rs.getString("estado"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                conexion.cerrarConexion();
+            }
+
+            return empleado;
+        }
+    
+
     public void close() {
         cerrarConexion();
     }
