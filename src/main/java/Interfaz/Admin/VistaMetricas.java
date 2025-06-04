@@ -1,29 +1,34 @@
 
 package Interfaz.Admin;
 
-import Servicio.GestionEmpleado;
-import Interfaz.LoginPanel;
-import Modelo.Entidades.Categoria;
-import Modelo.Entidades.Empleado;
-import Modelo.Entidades.Usuario;
-import Servicio.GestionCategoria;
-import Servicio.GestionIncidente;
-import java.awt.Image;
-import java.util.List;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableModel;
-import static proyectoFinal.gestionTickets.Main.usuario;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfWriter;
-import java.awt.Desktop;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+    import Servicio.GestionEmpleado;
+    import Interfaz.LoginPanel;
+    import Modelo.Entidades.Categoria;
+    import Modelo.Entidades.Empleado;
+    import Modelo.Entidades.Usuario;
+    import Servicio.GestionCategoria;
+    import Servicio.GestionIncidente;
+    import com.itextpdf.text.BaseColor;
+    import com.itextpdf.text.Chunk;
+    import java.awt.Image;
+    import java.util.List;
+    import javax.swing.ImageIcon;
+    import javax.swing.JLabel;
+    import javax.swing.table.DefaultTableModel;
+    import static proyectoFinal.gestionTickets.Main.usuario;
+    import com.itextpdf.text.Document;
+    import com.itextpdf.text.DocumentException;
+    import com.itextpdf.text.Element;
+    import com.itextpdf.text.Font;
+    import com.itextpdf.text.Paragraph;
+    import com.itextpdf.text.pdf.PdfWriter;
+    import com.itextpdf.text.pdf.draw.LineSeparator;
+    import java.awt.Desktop;
+    import java.io.File;
+    import java.io.FileOutputStream;
+    import java.io.IOException;
+    import java.time.LocalDateTime;
+    import java.time.format.DateTimeFormatter;
 
 
 
@@ -724,47 +729,75 @@ public class VistaMetricas extends javax.swing.JFrame {
     }//GEN-LAST:event_btActualizar1ActionPerformed
 
     private void btExportarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportarPDFActionPerformed
-       Document documento = new Document();
+   Document documento = new Document();
 
-    try {
-        // Ruta donde se guarda el PDF
-        String ruta = "C:\\Users\\sergi\\Desktop\\reporte.pdf"; // Cambiable si querés
-        PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+try {
+    String nombreCompleto = txtNombreCompleto.getText(); 
+    // reemplazamos espacios por guiones bajos o quitamos caracteres no válidos
+    String nombreArchivo = nombreCompleto.replaceAll("\\s+", "_"); 
+    
+    String ruta = "C:\\Users\\sergi\\Desktop\\reporte_" + nombreArchivo + ".pdf";
+    
+    PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+    documento.open();
+    
+  
 
-        documento.open();
 
-        // Título y fecha
-        documento.add(new Paragraph("REPORTE DE MÉTRICAS"));
-         LocalDateTime ahora = LocalDateTime.now();
-        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-        documento.add(new Paragraph("Fecha y hora de generación: " + ahora.format(formato)));   
-        documento.add(new Paragraph(" ")); // espacio
+    // Fuentes personalizadas
+    Font tituloFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD, BaseColor.RED);
+    Font subTituloFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD,BaseColor.RED);
+    Font textoNormal = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
+    Font fechaFont = new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC, BaseColor.BLUE);
 
-        //  Obtener valores desde los campos del formulario
-        String idEmpleado = txtIdEmpleado.getText();
-        String nombreCompleto = txtNombreCompleto.getText();
-        String celular = txtCelular.getText();
+    // Título
+    Paragraph titulo = new Paragraph("REPORTE DE MÉTRICAS", tituloFont);
+    titulo.setAlignment(Element.ALIGN_CENTER);
+    documento.add(titulo);
 
-        //  Agregar los datos al PDF
-        documento.add(new Paragraph("Datos del Empleado"));
-        documento.add(new Paragraph("ID del Empleado: " + idEmpleado));
-        documento.add(new Paragraph("Nombre Completo: " + nombreCompleto));
-        documento.add(new Paragraph("Celular: " + celular));
-        documento.add(new Paragraph(" ")); // espacio
+    documento.add(Chunk.NEWLINE); // salto de línea
 
-        // agregar +
+    // Fecha y hora
+    LocalDateTime ahora = LocalDateTime.now();
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy ' ['HH:mm:ss']'");
+    Paragraph fecha = new Paragraph("Fecha y hora de generación: " + ahora.format(formato), fechaFont);
+    fecha.setAlignment(Element.ALIGN_RIGHT);
+    documento.add(fecha);
 
-        documento.close();
+    documento.add(Chunk.NEWLINE); // espacio
 
-        // ✅ Abre automáticamente el archivo PDF
-        Desktop.getDesktop().open(new File(ruta));
+    // Línea separadora
+    LineSeparator separator = new LineSeparator();
+    separator.setLineColor(BaseColor.LIGHT_GRAY);
+    documento.add(new Chunk(separator));
 
-        javax.swing.JOptionPane.showMessageDialog(this, "PDF generado exitosamente en:\n" + ruta);
+    documento.add(Chunk.NEWLINE);
 
-    } catch (DocumentException | IOException e) {
-        e.printStackTrace();
-        javax.swing.JOptionPane.showMessageDialog(this, "Error al generar el PDF:\n" + e.getMessage());
-    }
+    // Datos del formulario
+    String idEmpleado = txtIdEmpleado.getText();
+    String celular = txtCelular.getText();
+
+    documento.add(new Paragraph("Datos del Empleado", subTituloFont));
+    documento.add(Chunk.NEWLINE);
+    documento.add(new Paragraph("ID del Empleado: " + idEmpleado, textoNormal));
+    documento.add(new Paragraph("Nombre Completo: " + nombreCompleto, textoNormal));
+    documento.add(new Paragraph("Celular: " + celular, textoNormal));
+
+    documento.add(Chunk.NEWLINE);
+    documento.add(new Chunk(separator));
+    documento.add(Chunk.NEWLINE);
+
+    // Más contenido...
+
+    documento.close();
+    Desktop.getDesktop().open(new File(ruta));
+
+    javax.swing.JOptionPane.showMessageDialog(this, "PDF generado exitosamente en:\n" + ruta);
+
+} catch (DocumentException | IOException e) {
+    e.printStackTrace();
+    javax.swing.JOptionPane.showMessageDialog(this, "Error al generar el PDF:\n" + e.getMessage());
+}
     }//GEN-LAST:event_btExportarPDFActionPerformed
 
     private void txtPromedioRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPromedioRespuestaActionPerformed
