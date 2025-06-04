@@ -10,7 +10,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -220,5 +222,46 @@ public class ActividadEmpleadoDAO {
         }
         return incidentes;
     }
+    public List<Map<String, Object>> obtenerTicketsFinalizadosPorEmpleado(int idEmpleado) {
+    List<Map<String, Object>> tickets = new ArrayList<>();
+    String sql = """
+        SELECT 
+            i.id_incidente, 
+            c.nombre AS categoria,
+            i.descripcion, 
+            i.aula, 
+            DATE_FORMAT(i.fecha_reporte, '%d/%m/%Y') AS fecha_reporte,
+            DATE_FORMAT(i.hora_reporte, '%H:%i') AS hora_reporte,
+            DATE_FORMAT(a.fecha_resolucion, '%d/%m/%Y %H:%i') AS fecha_resolucion,
+            TIMESTAMPDIFF(MINUTE, a.fecha_asignacion, a.fecha_resolucion) AS tiempo_resolucion
+        FROM actividad_empleado a
+        JOIN incidente i ON a.id_incidente = i.id_incidente
+        JOIN categoria c ON i.id_categoria = c.id_categoria
+        WHERE a.id_empleado = ? AND a.fecha_resolucion IS NOT NULL
+        ORDER BY a.fecha_resolucion DESC
+        """;
+    
+    try (Connection con = new Conexiondb().establecerConexion();
+         PreparedStatement stmt = con.prepareStatement(sql)) {
+        stmt.setInt(1, idEmpleado);
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            Map<String, Object> ticket = new HashMap<>();
+            ticket.put("id_incidente", rs.getInt("id_incidente"));
+            ticket.put("categoria", rs.getString("categoria"));
+            ticket.put("descripcion", rs.getString("descripcion"));
+            ticket.put("aula", rs.getString("aula"));
+            ticket.put("fecha_reporte", rs.getString("fecha_reporte"));
+            ticket.put("hora_reporte", rs.getString("hora_reporte"));
+            ticket.put("fecha_resolucion", rs.getString("fecha_resolucion"));
+            ticket.put("tiempo_resolucion", rs.getInt("tiempo_resolucion"));
+            tickets.add(ticket);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return tickets;
+}
 
 }

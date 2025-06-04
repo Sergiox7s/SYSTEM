@@ -3,6 +3,8 @@ package Interfaz.Admin;
 
     import Servicio.GestionEmpleado;
     import Interfaz.LoginPanel;
+    import Modelo.DAO.ActividadEmpleadoDAO;
+    import Modelo.DAO.CategoriaDAO;
     import Modelo.Entidades.Categoria;
     import Modelo.Entidades.Empleado;
     import Modelo.Entidades.Usuario;
@@ -21,14 +23,23 @@ package Interfaz.Admin;
     import com.itextpdf.text.Element;
     import com.itextpdf.text.Font;
     import com.itextpdf.text.Paragraph;
+    import com.itextpdf.text.Phrase;
+    import com.itextpdf.text.pdf.PdfPCell;
+    import com.itextpdf.text.pdf.PdfPTable;
     import com.itextpdf.text.pdf.PdfWriter;
-    import com.itextpdf.text.pdf.draw.LineSeparator;
     import java.awt.Desktop;
     import java.io.File;
     import java.io.FileOutputStream;
     import java.io.IOException;
     import java.time.LocalDateTime;
     import java.time.format.DateTimeFormatter;
+    import java.util.Map;
+    import javax.swing.JOptionPane;
+
+
+
+
+
 
 
 
@@ -515,6 +526,11 @@ public class VistaMetricas extends javax.swing.JFrame {
         textIncidentesDia.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         textIncidentesDia.setText("-");
         textIncidentesDia.setBorder(null);
+        textIncidentesDia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textIncidentesDiaActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
@@ -727,53 +743,50 @@ public class VistaMetricas extends javax.swing.JFrame {
     private void btActualizar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btActualizar1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btActualizar1ActionPerformed
+private PdfPCell crearCelda(String texto, Font fuente, boolean esEncabezado) {
+    PdfPCell celda = new PdfPCell(new Phrase(texto, fuente));
+    celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+    celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
+    if (esEncabezado) {
+        celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+    }
+    return celda;
+}
 
     private void btExportarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportarPDFActionPerformed
-   Document documento = new Document();
+    Document documento = new Document();
 
 try {
-    String nombreCompleto = txtNombreCompleto.getText(); 
-    // reemplazamos espacios por guiones bajos o quitamos caracteres no válidos
-    String nombreArchivo = nombreCompleto.replaceAll("\\s+", "_"); 
     
-    String ruta = "C:\\Users\\sergi\\Desktop\\reporte_" + nombreArchivo + ".pdf";
+    String nombreCompleto = txtNombreCompleto.getText(); 
+    String nombreArchivo = nombreCompleto.replaceAll("\\s+", "_"); 
+
+    String userHome = System.getProperty("user.home");
+    String ruta = userHome + File.separator + "Desktop" + File.separator + "reporte_" + nombreArchivo + ".pdf";
     
     PdfWriter.getInstance(documento, new FileOutputStream(ruta));
     documento.open();
-    
-  
-
-
-    // Fuentes personalizadas
+ 
     Font tituloFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD, BaseColor.RED);
-    Font subTituloFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD,BaseColor.RED);
+    Font subTituloFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD, BaseColor.RED);
     Font textoNormal = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
     Font fechaFont = new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC, BaseColor.BLUE);
 
-    // Título
     Paragraph titulo = new Paragraph("REPORTE DE MÉTRICAS", tituloFont);
     titulo.setAlignment(Element.ALIGN_CENTER);
     documento.add(titulo);
 
-    documento.add(Chunk.NEWLINE); // salto de línea
+    documento.add(Chunk.NEWLINE);
 
-    // Fecha y hora
     LocalDateTime ahora = LocalDateTime.now();
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy ' ['HH:mm:ss']'");
     Paragraph fecha = new Paragraph("Fecha y hora de generación: " + ahora.format(formato), fechaFont);
     fecha.setAlignment(Element.ALIGN_RIGHT);
     documento.add(fecha);
 
-    documento.add(Chunk.NEWLINE); // espacio
-
-    // Línea separadora
-    LineSeparator separator = new LineSeparator();
-    separator.setLineColor(BaseColor.LIGHT_GRAY);
-    documento.add(new Chunk(separator));
-
+    documento.add(Chunk.NEWLINE);
     documento.add(Chunk.NEWLINE);
 
-    // Datos del formulario
     String idEmpleado = txtIdEmpleado.getText();
     String celular = txtCelular.getText();
 
@@ -783,21 +796,68 @@ try {
     documento.add(new Paragraph("Nombre Completo: " + nombreCompleto, textoNormal));
     documento.add(new Paragraph("Celular: " + celular, textoNormal));
 
+    CategoriaDAO categoriaDAO = new CategoriaDAO();
+    String categoriaEmpleado = categoriaDAO.obtenerCategoriaPorEmpleado(Integer.parseInt(idEmpleado));
+    documento.add(new Paragraph("Categoría: " + categoriaEmpleado, textoNormal));
+
     documento.add(Chunk.NEWLINE);
-    documento.add(new Chunk(separator));
     documento.add(Chunk.NEWLINE);
 
-    // Más contenido...
+    // 🔽 Sección de tickets finalizados
+    ActividadEmpleadoDAO actividadDAO = new ActividadEmpleadoDAO();
+    List<Map<String, Object>> ticketsFinalizados = actividadDAO.obtenerTicketsFinalizadosPorEmpleado(Integer.parseInt(idEmpleado));
+
+    documento.add(new Paragraph("Historial de Tickets Finalizados", subTituloFont));
+    documento.add(Chunk.NEWLINE);
+
+    if (!ticketsFinalizados.isEmpty()) {
+        PdfPTable tablaTickets = new PdfPTable(5);
+        tablaTickets.setWidthPercentage(100);
+        tablaTickets.setWidths(new float[]{1, 2, 3, 2, 2});
+
+        tablaTickets.addCell(crearCelda("ID", textoNormal, true));
+        tablaTickets.addCell(crearCelda("Categoría", textoNormal, true));
+        tablaTickets.addCell(crearCelda("Descripción", textoNormal, true));
+        tablaTickets.addCell(crearCelda("Aula", textoNormal, true));
+        tablaTickets.addCell(crearCelda("Tiempo (min)", textoNormal, true));
+
+        for (Map<String, Object> ticket : ticketsFinalizados) {
+            tablaTickets.addCell(crearCelda(ticket.get("id_incidente").toString(), textoNormal, false));
+            tablaTickets.addCell(crearCelda(ticket.get("categoria").toString(), textoNormal, false));
+            tablaTickets.addCell(crearCelda(ticket.get("descripcion").toString(), textoNormal, false));
+            tablaTickets.addCell(crearCelda(ticket.get("aula").toString(), textoNormal, false));
+            tablaTickets.addCell(crearCelda(ticket.get("tiempo_resolucion").toString(), textoNormal, false));
+        }
+
+        documento.add(tablaTickets);
+
+        int totalTickets = ticketsFinalizados.size();
+        int tiempoPromedio = (int) ticketsFinalizados.stream()
+                .mapToInt(t -> Integer.parseInt(t.get("tiempo_resolucion").toString()))
+                .average()
+                .orElse(0);
+
+        documento.add(Chunk.NEWLINE);
+        documento.add(new Paragraph("Total de tickets finalizados: " + totalTickets, textoNormal));
+        documento.add(new Paragraph("Tiempo promedio de resolución: " + tiempoPromedio + " minutos", textoNormal));
+
+    } else {
+        documento.add(new Paragraph("El empleado no tiene tickets finalizados.", textoNormal));
+    }
+
+    documento.add(Chunk.NEWLINE);
+    documento.add(Chunk.NEWLINE);
 
     documento.close();
     Desktop.getDesktop().open(new File(ruta));
 
-    javax.swing.JOptionPane.showMessageDialog(this, "PDF generado exitosamente en:\n" + ruta);
+    JOptionPane.showMessageDialog(this, "PDF generado exitosamente en:\n" + ruta);
 
 } catch (DocumentException | IOException e) {
     e.printStackTrace();
-    javax.swing.JOptionPane.showMessageDialog(this, "Error al generar el PDF:\n" + e.getMessage());
+    JOptionPane.showMessageDialog(this, "Error al generar el PDF:\n" + e.getMessage());
 }
+
     }//GEN-LAST:event_btExportarPDFActionPerformed
 
     private void txtPromedioRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPromedioRespuestaActionPerformed
@@ -815,6 +875,10 @@ try {
     private void textTiempoPromedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTiempoPromedioActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textTiempoPromedioActionPerformed
+
+    private void textIncidentesDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIncidentesDiaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textIncidentesDiaActionPerformed
         
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));

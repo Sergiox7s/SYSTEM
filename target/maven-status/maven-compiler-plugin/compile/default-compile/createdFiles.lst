@@ -76,6 +76,7 @@ Interfaz\Admin\VistaHistorial$3.class
 Interfaz\Admin\VistaMetricas$4.class
 Interfaz\Docente\VistaDocente$7.class
 Interfaz\Admin\VistaDetalleTicket$1.class
+Interfaz\Admin\VistaMetricas$13.class
 Interfaz\SuperAdm\SuperAdmCategorias$1.class
 Modelo\Entidades\Empleado.class
 Interfaz\Admin\VistaHistorial.class
