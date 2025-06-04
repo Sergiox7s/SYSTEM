@@ -2,9 +2,12 @@ package Servicio;
 
 import Modelo.Entidades.Incidente;
 import Modelo.DAO.IncidenteDAO;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class GestionIncidente {
 
@@ -55,6 +58,56 @@ public class GestionIncidente {
 
     public Incidente obtenerIncidentePorId(int idTicket) {
         return incidenteDAO.obtenerIncidentePorId(idTicket);
+    }
+
+    public List<Incidente> obtenerIncidentesFinalizadosPorUsuario(int idUsuario) {
+        return incidenteDAO.obtenerIncidentesFinalizadosPorUsuario(idUsuario);
+    }
+
+    public void mostrarIncidentesFinalizadosEnTabla(int idUsuario, JTable tabla) {
+        // Obtener la lista de incidentes finalizados
+        List<Incidente> incidentesFinalizados = obtenerIncidentesFinalizadosPorUsuario(idUsuario);
+
+        // Crear el modelo de tabla
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("Categoria");
+        model.addColumn("Descripción");
+        model.addColumn("Aula");
+        model.addColumn("Contacto");
+        model.addColumn("Estado");
+        model.addColumn("Solicitante");
+        model.addColumn("Fecha Reporte");
+        model.addColumn("Hora Reporte");
+        model.addColumn("Fecha Finalización");
+
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+
+        for (Incidente incidente : incidentesFinalizados) {
+            String nombreCompletoSolicitante = incidente.getSolicita().getNombre();
+            if (incidente.getSolicita().getApellido() != null) {
+                nombreCompletoSolicitante += " " + incidente.getSolicita().getApellido();
+            }
+
+            String horaFormateada = incidente.getHoraReporte().format(timeFormatter);
+            String fechaFinalizacion = "Fecha finalización"; // Reemplazar con el campo real si lo tienes
+
+            model.addRow(new Object[]{
+                incidente.getIdTicket(),
+                incidente.getCategoria().getNombre(),
+                incidente.getDescripcion(),
+                incidente.getAula(),
+                incidente.getCelular(),
+                incidente.getEstado(),
+                nombreCompletoSolicitante,
+                incidente.getFechaReporte(),
+                horaFormateada,
+                fechaFinalizacion
+            });
+        }
+
+        tabla.setModel(model);
     }
 
     /**

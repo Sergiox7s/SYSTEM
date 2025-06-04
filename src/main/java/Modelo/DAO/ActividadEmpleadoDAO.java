@@ -63,7 +63,7 @@ public class ActividadEmpleadoDAO {
             conexionDB.cerrarConexion();
         }
     }
-
+    
     public Incidente obtenerIncidentePorId(int idTicket) {
         Conexiondb conexion = new Conexiondb();
         Connection con = conexion.establecerConexion();

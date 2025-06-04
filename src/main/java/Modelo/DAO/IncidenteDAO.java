@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class IncidenteDAO {
 
@@ -288,6 +290,75 @@ public class IncidenteDAO {
 
         return finalizadosCount;
     }
+
+    public List<Incidente> obtenerIncidentesFinalizadosPorUsuario(int idUsuario) {
+        List<Incidente> incidentesFinalizados = new ArrayList<>();
+        Conexiondb conexionDB = new Conexiondb();
+        Connection con = null;
+
+        try {
+            con = conexionDB.establecerConexion();
+            if (con != null) {
+                String query = """
+                SELECT i.id_incidente, c.id_categoria, c.nombre AS categoria, i.descripcion,
+                       i.aula, i.celular, i.fecha_reporte, i.hora_reporte, i.estado,
+                       u.id_usuario, u.nombre, u.apellido,
+                       e.id_empleado, CONCAT(e.nombre, ' ', e.apellido) AS asignado_a,
+                       i.fecha_hora_finalizado
+                FROM incidente i
+                JOIN categoria c ON i.id_categoria = c.id_categoria
+                JOIN usuario u ON i.id_usuario = u.id_usuario
+                JOIN empleado e ON i.id_empleado_asignado = e.id_empleado
+                WHERE e.id_usuario = ? AND i.estado = 'finalizado'
+                ORDER BY i.fecha_hora_finalizado DESC;
+            """;
+
+                PreparedStatement ps = con.prepareStatement(query);
+                ps.setInt(1, idUsuario);
+                ResultSet rs = ps.executeQuery();
+
+                DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
+
+                while (rs.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setId(rs.getInt("id_usuario"));
+                    usuario.setNombre(rs.getString("nombre"));
+                    usuario.setApellido(rs.getString("apellido"));
+
+                    Empleado empleado = (rs.getInt("id_empleado") != 0)
+                            ? new Empleado(rs.getInt("id_empleado"), rs.getString("asignado_a"))
+                            : null;
+
+                    String horaFormateada = rs.getTime("hora_reporte").toLocalTime().format(timeFormatter);
+
+                    Incidente incidente = new Incidente(
+                            rs.getInt("id_incidente"),
+                            new Categoria(rs.getInt("id_categoria"), rs.getString("categoria")),
+                            rs.getString("descripcion"),
+                            rs.getString("celular"),
+                            rs.getString("aula"),
+                            rs.getString("estado"),
+                            rs.getDate("fecha_reporte").toLocalDate(),
+                            LocalTime.parse(horaFormateada, timeFormatter),
+                            usuario,
+                            empleado
+                    );
+
+                    // Si necesitas la fecha de finalización en el objeto Incidente, deberías agregar este campo a tu clase
+                    // incidente.setFechaFinalizacion(rs.getTimestamp("fecha_hora_finalizado").toLocalDateTime());
+                    incidentesFinalizados.add(incidente);
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener incidentes finalizados: " + e.getMessage());
+        } finally {
+            conexionDB.cerrarConexion();
+        }
+
+        return incidentesFinalizados;
+    }
+
+    
 
     public Incidente obtenerIncidentePorId(int idTicket) {
         Conexiondb conexion = new Conexiondb();
