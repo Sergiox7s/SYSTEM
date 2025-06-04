@@ -15,8 +15,16 @@
             <url>file:${project.basedir}/lib</url>
         </repository>
     </repositories>
+        <!-- primera dependecia es PDF -->
 
     <dependencies>
+        
+         <dependency>
+        <groupId>com.lowagie</groupId>
+        <artifactId>itext</artifactId>
+        <version>2.1.7</version>
+        </dependency>
+        
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
@@ -38,7 +46,16 @@
             <artifactId>datechooser</artifactId>
             <version>SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>itext5-itextpdf-5.5.12</groupId>
+            <artifactId>itext5-itextpdf-5.5.12</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
+    
+        
+    
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

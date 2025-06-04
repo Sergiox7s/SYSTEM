@@ -55,6 +55,7 @@ Interfaz\Admin\VistaMetricas$9.class
 Interfaz\Admin\VistaHistorial$5.class
 Interfaz\Admin\VistaMetricas$1.class
 Interfaz\SuperAdm\SuperAdmCategorias$4.class
+Interfaz\Admin\VistaMetricas$10.class
 Interfaz\Admin\VistaColaIncidente$9.class
 Interfaz\SoporteEquipo\VistaPersonal$1.class
 Interfaz\Admin\VistaHistorial$9.class
@@ -80,6 +81,7 @@ Modelo\Entidades\Empleado.class
 Interfaz\Admin\VistaHistorial.class
 Interfaz\Docente\VistaDocente$4.class
 Interfaz\Admin\VistaMetricas$6.class
+Interfaz\Admin\VistaMetricas$12.class
 Interfaz\Admin\VistaColaIncidente$4.class
 Interfaz\Admin\VistaHistorial$7.class
 Servicio\GestionActividadEmpleado.class
@@ -90,6 +92,7 @@ Modelo\DAO\TicketDAO.class
 Modelo\Entidades\Incidente.class
 Servicio\GestionEmpleado.class
 Interfaz\Docente\VistaDocente$5.class
+Interfaz\Admin\VistaMetricas$11.class
 proyectoFinal\gestionTickets\Main.class
 Interfaz\Admin\VistaColaIncidente$5.class
 Interfaz\SuperAdm\SuperAdmUsuarios$3.class

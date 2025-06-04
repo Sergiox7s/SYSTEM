@@ -14,6 +14,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import static proyectoFinal.gestionTickets.Main.usuario;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
 
 
 public class VistaMetricas extends javax.swing.JFrame {
@@ -82,6 +94,9 @@ public class VistaMetricas extends javax.swing.JFrame {
             }
         }
     }
+  
+ 
+   
 
     public void mostrarHistorialEmpleado() {
   
@@ -145,7 +160,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         txtPromedioRespuesta = new javax.swing.JTextField();
         jLabel26 = new javax.swing.JLabel();
         txtEstado = new javax.swing.JTextField();
-        btActualizar = new javax.swing.JButton();
+        btExportarPDF = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         textIncidentesDia = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -161,8 +176,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         jSeparator18 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        btActualizar1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -342,6 +356,11 @@ public class VistaMetricas extends javax.swing.JFrame {
         txtTotalIncidentes.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtTotalIncidentes.setText("--");
         txtTotalIncidentes.setBorder(null);
+        txtTotalIncidentes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTotalIncidentesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -468,19 +487,19 @@ public class VistaMetricas extends javax.swing.JFrame {
         txtEstado.setBorder(null);
         jPanel2.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 480, 170, -1));
 
-        btActualizar.setBackground(new java.awt.Color(134, 173, 17));
-        btActualizar.setForeground(new java.awt.Color(255, 255, 255));
-        btActualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
-        btActualizar.setText("ACTUALIZAR");
-        btActualizar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btActualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btActualizar.setFocusPainted(false);
-        btActualizar.addActionListener(new java.awt.event.ActionListener() {
+        btExportarPDF.setBackground(new java.awt.Color(255, 0, 0));
+        btExportarPDF.setForeground(new java.awt.Color(255, 255, 255));
+        btExportarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
+        btExportarPDF.setText("EXPORTAR [PDF]");
+        btExportarPDF.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btExportarPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btExportarPDF.setFocusPainted(false);
+        btExportarPDF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btActualizarActionPerformed(evt);
+                btExportarPDFActionPerformed(evt);
             }
         });
-        jPanel2.add(btActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 150, 40));
+        jPanel2.add(btExportarPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, 150, 40));
 
         jPanel4.setBackground(new java.awt.Color(0, 102, 204));
 
@@ -522,6 +541,11 @@ public class VistaMetricas extends javax.swing.JFrame {
         textTiempoPromedio.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         textTiempoPromedio.setText("--");
         textTiempoPromedio.setBorder(null);
+        textTiempoPromedio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textTiempoPromedioActionPerformed(evt);
+            }
+        });
 
         jLabel15.setFont(new java.awt.Font("Poppins", 0, 13)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
@@ -621,23 +645,21 @@ public class VistaMetricas extends javax.swing.JFrame {
         jPanel2.add(jSeparator18, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 720, 10));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/fondoBlanco.jpg"))); // NOI18N
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 610));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1100, 610));
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 150, Short.MAX_VALUE)
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
-        );
-
-        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 150, 40));
-
-        jLabel2.setText("jLabel2");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 70, -1, -1));
+        btActualizar1.setBackground(new java.awt.Color(134, 173, 17));
+        btActualizar1.setForeground(new java.awt.Color(255, 255, 255));
+        btActualizar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
+        btActualizar1.setText("ACTUALIZAR");
+        btActualizar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btActualizar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btActualizar1.setFocusPainted(false);
+        btActualizar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btActualizar1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btActualizar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 150, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -697,18 +719,70 @@ public class VistaMetricas extends javax.swing.JFrame {
 
     }//GEN-LAST:event_lbVistaHistorialMouseClicked
 
+    private void btActualizar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btActualizar1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btActualizar1ActionPerformed
+
+    private void btExportarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportarPDFActionPerformed
+       Document documento = new Document();
+
+    try {
+        // Ruta donde se guarda el PDF
+        String ruta = "C:\\Users\\sergi\\Desktop\\reporte.pdf"; // Cambiable si querés
+        PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+
+        documento.open();
+
+        // Título y fecha
+        documento.add(new Paragraph("REPORTE DE MÉTRICAS"));
+         LocalDateTime ahora = LocalDateTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+        documento.add(new Paragraph("Fecha y hora de generación: " + ahora.format(formato)));   
+        documento.add(new Paragraph(" ")); // espacio
+
+        //  Obtener valores desde los campos del formulario
+        String idEmpleado = txtIdEmpleado.getText();
+        String nombreCompleto = txtNombreCompleto.getText();
+        String celular = txtCelular.getText();
+
+        //  Agregar los datos al PDF
+        documento.add(new Paragraph("Datos del Empleado"));
+        documento.add(new Paragraph("ID del Empleado: " + idEmpleado));
+        documento.add(new Paragraph("Nombre Completo: " + nombreCompleto));
+        documento.add(new Paragraph("Celular: " + celular));
+        documento.add(new Paragraph(" ")); // espacio
+
+        // agregar +
+
+        documento.close();
+
+        // ✅ Abre automáticamente el archivo PDF
+        Desktop.getDesktop().open(new File(ruta));
+
+        javax.swing.JOptionPane.showMessageDialog(this, "PDF generado exitosamente en:\n" + ruta);
+
+    } catch (DocumentException | IOException e) {
+        e.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(this, "Error al generar el PDF:\n" + e.getMessage());
+    }
+    }//GEN-LAST:event_btExportarPDFActionPerformed
+
     private void txtPromedioRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPromedioRespuestaActionPerformed
 
     }//GEN-LAST:event_txtPromedioRespuestaActionPerformed
 
-    private void btActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btActualizarActionPerformed
-
-    }//GEN-LAST:event_btActualizarActionPerformed
-    
     private void cbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCategoriaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbCategoriaActionPerformed
-    
+
+    private void txtTotalIncidentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalIncidentesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTotalIncidentesActionPerformed
+
+    private void textTiempoPromedioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTiempoPromedioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textTiempoPromedioActionPerformed
+        
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));
         Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
@@ -716,7 +790,8 @@ public class VistaMetricas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btActualizar;
+    private javax.swing.JButton btActualizar1;
+    private javax.swing.JButton btExportarPDF;
     private javax.swing.JComboBox<Categoria> cbCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -725,7 +800,6 @@ public class VistaMetricas extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
@@ -740,7 +814,6 @@ public class VistaMetricas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
