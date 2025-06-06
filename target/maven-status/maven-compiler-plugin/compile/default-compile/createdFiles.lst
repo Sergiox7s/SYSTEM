@@ -13,6 +13,7 @@ Interfaz\Admin\VistaDetalleTicket$2.class
 Interfaz\Admin\VistaMetricas$5.class
 Interfaz\Docente\VistaDocente$3.class
 Modelo\Entidades\ActividadEmpleado.class
+Interfaz\Docente\VistaRegistroTicket$6.class
 Interfaz\SuperAdm\SuperAdmCategorias$5.class
 Modelo\Conexion\Conexiondb.class
 Interfaz\SuperAdm\SupAdmAjustes.class
@@ -106,4 +107,5 @@ Utilidades\MenuSuperAdm$1.class
 Interfaz\SuperAdm\SuperAdmCategorias$6.class
 Interfaz\Docente\VistaRegistroTicket$5.class
 Servicio\GestionIncidente.class
+Interfaz\SoporteEquipo\VistaEmpleado$5.class
 Interfaz\Admin\VistaMetricas.class

@@ -757,7 +757,10 @@ public class VistaMetricas extends javax.swing.JFrame {
             String nombreArchivo = nombreCompleto.replaceAll("\\s+", "_");
 
             String userHome = System.getProperty("user.home");
-            String ruta = "D:\\Backup\\Escritorio\\" + "reporte_" + nombreArchivo + ".pdf";
+            // ruta juan [ String ruta = "D:\\Backup\\Escritorio\\" + "reporte_" + nombreArchivo + ".pdf";]
+                String ruta = userHome + File.separator + "Desktop" + File.separator + "reporte_" + nombreArchivo + ".pdf";
+            
+            
 
             PdfWriter.getInstance(documento, new FileOutputStream(ruta));
             documento.open();
@@ -879,7 +882,9 @@ public class VistaMetricas extends javax.swing.JFrame {
     private void btExportarExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportarExcelActionPerformed
         String url = "jdbc:mysql://localhost:3306/sistemaIncidencias";
         String usuario = "root";
-        String contrasena = "75000454jd";
+         // juan bd String contrasena = "75000454jd";
+         String contrasena = "180701";
+         
 
         String sql = "SELECT e.id_empleado, e.nombre, e.apellido, c.nombre AS categoria, "
                 + "e.estado, e.celular "
