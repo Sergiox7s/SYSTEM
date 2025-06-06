@@ -31,10 +31,21 @@ package Interfaz.Admin;
     import java.io.File;
     import java.io.FileOutputStream;
     import java.io.IOException;
+    import java.sql.Connection;
+    import java.sql.DriverManager;
+    import java.sql.ResultSet;
+    import java.sql.SQLException;
+    import java.sql.Statement;
     import java.time.LocalDateTime;
     import java.time.format.DateTimeFormatter;
     import java.util.Map;
+    import javax.swing.JFileChooser;
     import javax.swing.JOptionPane;
+    import org.apache.poi.ss.usermodel.Cell;
+    import org.apache.poi.ss.usermodel.Row;
+    import org.apache.poi.ss.usermodel.Sheet;
+    import org.apache.poi.ss.usermodel.Workbook;
+    import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 
@@ -192,7 +203,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         jSeparator18 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
-        btActualizar1 = new javax.swing.JButton();
+        btExportarExcel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -278,7 +289,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Poppins", 0, 20)); // NOI18N
         jLabel13.setForeground(new java.awt.Color(0, 102, 204));
         jLabel13.setText("Actividad actual:");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, 480, 30));
+        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 480, 30));
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setBorder(null);
@@ -485,7 +496,7 @@ public class VistaMetricas extends javax.swing.JFrame {
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtPromedioRespuesta, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 490, 130, 90));
@@ -506,7 +517,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         btExportarPDF.setBackground(new java.awt.Color(255, 0, 0));
         btExportarPDF.setForeground(new java.awt.Color(255, 255, 255));
         btExportarPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
-        btExportarPDF.setText("EXPORTAR [PDF]");
+        btExportarPDF.setText("[PDF] DE EMPLEADO");
         btExportarPDF.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         btExportarPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btExportarPDF.setFocusPainted(false);
@@ -515,7 +526,7 @@ public class VistaMetricas extends javax.swing.JFrame {
                 btExportarPDFActionPerformed(evt);
             }
         });
-        jPanel2.add(btExportarPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, 150, 40));
+        jPanel2.add(btExportarPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 30, 160, 40));
 
         jPanel4.setBackground(new java.awt.Color(0, 102, 204));
 
@@ -666,21 +677,21 @@ public class VistaMetricas extends javax.swing.JFrame {
         jPanel2.add(jSeparator18, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, 720, 10));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/fondoBlanco.jpg"))); // NOI18N
-        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1100, 610));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 1100, 610));
 
-        btActualizar1.setBackground(new java.awt.Color(134, 173, 17));
-        btActualizar1.setForeground(new java.awt.Color(255, 255, 255));
-        btActualizar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
-        btActualizar1.setText("ACTUALIZAR");
-        btActualizar1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btActualizar1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btActualizar1.setFocusPainted(false);
-        btActualizar1.addActionListener(new java.awt.event.ActionListener() {
+        btExportarExcel.setBackground(new java.awt.Color(0, 153, 0));
+        btExportarExcel.setForeground(new java.awt.Color(255, 255, 255));
+        btExportarExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
+        btExportarExcel.setText("[EXCEL] TOTAL EMPLEADOS");
+        btExportarExcel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btExportarExcel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btExportarExcel.setFocusPainted(false);
+        btExportarExcel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btActualizar1ActionPerformed(evt);
+                btExportarExcelActionPerformed(evt);
             }
         });
-        jPanel2.add(btActualizar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 20, 150, 40));
+        jPanel2.add(btExportarExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 210, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -739,10 +750,6 @@ public class VistaMetricas extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_lbVistaHistorialMouseClicked
-
-    private void btActualizar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btActualizar1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btActualizar1ActionPerformed
 private PdfPCell crearCelda(String texto, Font fuente, boolean esEncabezado) {
     PdfPCell celda = new PdfPCell(new Phrase(texto, fuente));
     celda.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -859,7 +866,9 @@ try {
 }
 
     }//GEN-LAST:event_btExportarPDFActionPerformed
-
+  
+    
+    
     private void txtPromedioRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPromedioRespuestaActionPerformed
 
     }//GEN-LAST:event_txtPromedioRespuestaActionPerformed
@@ -879,6 +888,73 @@ try {
     private void textIncidentesDiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIncidentesDiaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_textIncidentesDiaActionPerformed
+
+    private void btExportarExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportarExcelActionPerformed
+        String url = "jdbc:mysql://localhost:3306/sistemaIncidencias";
+    String usuario = "root"; 
+    String contrasena = "180701";  
+
+    String sql = "SELECT e.id_empleado, e.nombre, e.apellido, c.nombre AS categoria, " +
+                 "e.estado, e.celular " +
+                 "FROM empleado e LEFT JOIN categoria c ON e.id_categoria = c.id_categoria" ;
+
+    try (
+        Connection conn = DriverManager.getConnection(url, usuario, contrasena);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        Workbook workbook = new XSSFWorkbook()
+    ) {
+        Sheet sheet = workbook.createSheet("Empleados");
+
+        // Encabezados
+        Row header = sheet.createRow(0);
+        String[] columnas = {"ID", "Nombre", "Apellido", "Categoría", "Estado", "Celular"};
+
+        for (int i = 0; i < columnas.length; i++) {
+            Cell cell = header.createCell(i);
+            cell.setCellValue(columnas[i]);
+        }
+
+        // Datos
+        int rowIndex = 1;
+        while (rs.next()) {
+            Row row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(rs.getInt("id_empleado"));
+            row.createCell(1).setCellValue(rs.getString("nombre"));
+            row.createCell(2).setCellValue(rs.getString("apellido"));
+            row.createCell(3).setCellValue(rs.getString("categoria"));
+            row.createCell(4).setCellValue(rs.getString("estado"));
+            row.createCell(5).setCellValue(rs.getString("celular"));
+        }
+
+        // Ajuste de ancho de columnas
+        for (int i = 0; i < columnas.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // Guardar archivo
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar archivo Excel");
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            if (!fileToSave.getName().toLowerCase().endsWith(".xlsx")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(fileToSave)) {
+                workbook.write(fileOut);
+                JOptionPane.showMessageDialog(this, "Archivo Excel exportado correctamente.");
+            }
+        }
+
+    } catch (SQLException | IOException e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al exportar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }  
+
+    }//GEN-LAST:event_btExportarExcelActionPerformed
         
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));
@@ -887,7 +963,7 @@ try {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btActualizar1;
+    private javax.swing.JButton btExportarExcel;
     private javax.swing.JButton btExportarPDF;
     private javax.swing.JComboBox<Categoria> cbCategoria;
     private javax.swing.JLabel jLabel1;

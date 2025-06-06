@@ -227,7 +227,7 @@ public class VistaEmpleado extends java.awt.Frame {
         ));
         jScrollPane1.setViewportView(tableTicketActual);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 930, 340));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 970, 340));
 
         jLabel7.setText("PENDIENTES");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, -1, -1));
@@ -262,7 +262,7 @@ public class VistaEmpleado extends java.awt.Frame {
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 0, 440, 180));
 
         jLabel10.setText("FINALIZAR TICKET");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 200, 110, 30));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 200, 110, 30));
 
         jLabel12.setText("#Pagina");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
@@ -277,7 +277,7 @@ public class VistaEmpleado extends java.awt.Frame {
         jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 550, 150, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/completado.png"))); // NOI18N
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 230, 90, 80));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 240, 90, 80));
 
         lbFecha.setText("jLabel5");
         jPanel1.add(lbFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 140, 30));
