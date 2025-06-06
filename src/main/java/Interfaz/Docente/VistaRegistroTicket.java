@@ -213,6 +213,11 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
                 cbCategoriaMouseClicked(evt);
             }
         });
+        cbCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCategoriaActionPerformed(evt);
+            }
+        });
         jPanel6.add(cbCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(47, 148, 560, -1));
 
         jLabel21.setFont(new java.awt.Font("Poppins", 0, 11)); // NOI18N
@@ -350,6 +355,10 @@ public class VistaRegistroTicket extends javax.swing.JFrame {
         lp.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_lbSalirSistemaMouseClicked
+
+    private void cbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbCategoriaActionPerformed
 
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));

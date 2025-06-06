@@ -4,8 +4,11 @@
  */
 package Interfaz.SoporteEquipo;
 
+import Interfaz.Admin.VistaDetalleTicket;
+import static Interfaz.Admin.VistaHistorial.tableHistorial;
 import Interfaz.LoginPanel;
 import Modelo.DAO.EmpleadoDAO;
+import Modelo.DAO.IncidenteDAO;
 import Modelo.DAO.TicketDAO;
 import Modelo.Entidades.Empleado;
 import Modelo.Entidades.Incidente;
@@ -20,6 +23,7 @@ import java.util.Queue;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
@@ -53,7 +57,7 @@ public class VistaEmpleado extends java.awt.Frame {
         cargarTicketsUsuario(u.getId());
 
         SetImageLabel(jLabel1, "/Img/apoyoicon.png");
-        SetImageButton(jButton1, "/Img/completado.png");
+        SetImageButton(btnFinalizar, "/Img/completado.png");
         SetImageButton(jButton2, "/Img/warFile.png");
         SetImageButton(jButton3, "/Img/checkgreen.png");
         SetImageButton(jButton4, "/Img/reporteAnual.png");
@@ -140,7 +144,6 @@ public class VistaEmpleado extends java.awt.Frame {
         lblSalirSistema = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        lblNombre = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableTicketActual = new javax.swing.JTable();
@@ -156,7 +159,7 @@ public class VistaEmpleado extends java.awt.Frame {
         jLabel13 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jComboBox2 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        btnFinalizar = new javax.swing.JButton();
         lbFecha = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         lblASIGNADOS = new javax.swing.JLabel();
@@ -205,10 +208,6 @@ public class VistaEmpleado extends java.awt.Frame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/apoyoicon.png"))); // NOI18N
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 180, 150));
-
-        lblNombre.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblNombre.setText("name");
-        jPanel1.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 130, 180, 50));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("DISPONIBILIDAD");
@@ -276,8 +275,13 @@ public class VistaEmpleado extends java.awt.Frame {
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 550, 150, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/completado.png"))); // NOI18N
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 240, 90, 80));
+        btnFinalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/completado.png"))); // NOI18N
+        btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 240, 90, 80));
 
         lbFecha.setText("jLabel5");
         jPanel1.add(lbFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 140, 30));
@@ -327,6 +331,54 @@ public class VistaEmpleado extends java.awt.Frame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         gestionIncidente.mostrarIncidentesFinalizadosEnTabla(u.getId(), tableTicketActual);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizarActionPerformed
+        
+        int selectedRow = tableTicketActual.getSelectedRow();
+
+    if (selectedRow != -1) {
+        int idTicket = (int) tableTicketActual.getValueAt(selectedRow, 0);
+        String estado = (String) tableTicketActual.getValueAt(selectedRow, 5); // Columna de estado
+        
+        if (estado.equals("FINALIZADO")) {
+            JOptionPane.showMessageDialog(this, "Este ticket ya está finalizado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String[] opciones = {"Sí", "No"};
+        int confirmacion = JOptionPane.showOptionDialog(
+            this,
+            "¿Está seguro de que desea finalizar este ticket?",
+            "Confirmar finalización",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]
+        );
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            IncidenteDAO incidenteDAO = new IncidenteDAO();
+            boolean finalizado = incidenteDAO.finalizarTicket(idTicket);
+
+            if (finalizado) {
+                JOptionPane.showMessageDialog(this, "El ticket ha sido finalizado exitosamente.");
+                
+
+                tableTicketActual.setValueAt("FINALIZADO", selectedRow, 5); // Actualizar estado
+                
+                actualizarVista();
+            } else {
+                JOptionPane.showMessageDialog(this, "Hubo un problema al finalizar el ticket.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un incidente.", "Error", JOptionPane.WARNING_MESSAGE);
+    }
+        
+        
+        
+    }//GEN-LAST:event_btnFinalizarActionPerformed
     
     
 
@@ -348,7 +400,7 @@ public class VistaEmpleado extends java.awt.Frame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -372,7 +424,6 @@ public class VistaEmpleado extends java.awt.Frame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbFecha;
     private javax.swing.JLabel lblASIGNADOS;
-    private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblNombreEmpleado;
     private javax.swing.JLabel lblSalirSistema;
     private javax.swing.JTable tableTicketActual;

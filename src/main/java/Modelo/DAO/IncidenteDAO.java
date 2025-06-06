@@ -300,18 +300,31 @@ public class IncidenteDAO {
             con = conexionDB.establecerConexion();
             if (con != null) {
                 String query = """
-                SELECT i.id_incidente, c.id_categoria, c.nombre AS categoria, i.descripcion,
-                       i.aula, i.celular, i.fecha_reporte, i.hora_reporte, i.estado,
-                       u.id_usuario, u.nombre, u.apellido,
-                       e.id_empleado, CONCAT(e.nombre, ' ', e.apellido) AS asignado_a,
-                       i.fecha_hora_finalizado
-                FROM incidente i
-                JOIN categoria c ON i.id_categoria = c.id_categoria
-                JOIN usuario u ON i.id_usuario = u.id_usuario
-                JOIN empleado e ON i.id_empleado_asignado = e.id_empleado
-                WHERE e.id_usuario = ? AND i.estado = 'finalizado'
-                ORDER BY i.fecha_hora_finalizado DESC;
-            """;
+                    SELECT 
+                        i.id_incidente, 
+                        c.id_categoria, 
+                        c.nombre AS categoria, 
+                        i.descripcion,
+                        i.aula, 
+                        i.celular, 
+                        i.fecha_reporte, 
+                        i.hora_reporte, 
+                        i.estado,
+                        u.id_usuario, 
+                        u.nombre, 
+                        u.apellido,
+                        e.id_empleado, 
+                        CONCAT(e.nombre, ' ', e.apellido) AS asignado_a,
+                        DATE_FORMAT(a.fecha_resolucion, '%Y-%m-%d %h:%i %p') AS fecha_finalizacion_formateada,
+                        a.fecha_resolucion
+                    FROM incidente i
+                    JOIN categoria c ON i.id_categoria = c.id_categoria
+                    JOIN usuario u ON i.id_usuario = u.id_usuario
+                    JOIN empleado e ON i.id_empleado_asignado = e.id_empleado
+                    JOIN actividad_empleado a ON i.id_incidente = a.id_incidente
+                    WHERE e.id_usuario = ? AND i.estado = 'finalizado'
+                    ORDER BY a.fecha_resolucion DESC;
+                """;
 
                 PreparedStatement ps = con.prepareStatement(query);
                 ps.setInt(1, idUsuario);
@@ -344,8 +357,12 @@ public class IncidenteDAO {
                             empleado
                     );
 
-                    // Si necesitas la fecha de finalización en el objeto Incidente, deberías agregar este campo a tu clase
-                    // incidente.setFechaFinalizacion(rs.getTimestamp("fecha_hora_finalizado").toLocalDateTime());
+                    // Asignar fechas
+                    if (rs.getTimestamp("fecha_resolucion") != null) {
+                        incidente.setFechaHoraFinalizado(rs.getTimestamp("fecha_resolucion").toLocalDateTime());
+                    }
+                    incidente.setFechaFinalizacionFormateada(rs.getString("fecha_finalizacion_formateada"));
+
                     incidentesFinalizados.add(incidente);
                 }
             }
@@ -357,8 +374,6 @@ public class IncidenteDAO {
 
         return incidentesFinalizados;
     }
-
-    
 
     public Incidente obtenerIncidentePorId(int idTicket) {
         Conexiondb conexion = new Conexiondb();

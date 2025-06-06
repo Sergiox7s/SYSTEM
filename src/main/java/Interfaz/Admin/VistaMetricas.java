@@ -1,59 +1,50 @@
-
 package Interfaz.Admin;
 
-    import Servicio.GestionEmpleado;
-    import Interfaz.LoginPanel;
-    import Modelo.DAO.ActividadEmpleadoDAO;
-    import Modelo.DAO.CategoriaDAO;
-    import Modelo.Entidades.Categoria;
-    import Modelo.Entidades.Empleado;
-    import Modelo.Entidades.Usuario;
-    import Servicio.GestionCategoria;
-    import Servicio.GestionIncidente;
-    import com.itextpdf.text.BaseColor;
-    import com.itextpdf.text.Chunk;
-    import java.awt.Image;
-    import java.util.List;
-    import javax.swing.ImageIcon;
-    import javax.swing.JLabel;
-    import javax.swing.table.DefaultTableModel;
-    import static proyectoFinal.gestionTickets.Main.usuario;
-    import com.itextpdf.text.Document;
-    import com.itextpdf.text.DocumentException;
-    import com.itextpdf.text.Element;
-    import com.itextpdf.text.Font;
-    import com.itextpdf.text.Paragraph;
-    import com.itextpdf.text.Phrase;
-    import com.itextpdf.text.pdf.PdfPCell;
-    import com.itextpdf.text.pdf.PdfPTable;
-    import com.itextpdf.text.pdf.PdfWriter;
-    import java.awt.Desktop;
-    import java.io.File;
-    import java.io.FileOutputStream;
-    import java.io.IOException;
-    import java.sql.Connection;
-    import java.sql.DriverManager;
-    import java.sql.ResultSet;
-    import java.sql.SQLException;
-    import java.sql.Statement;
-    import java.time.LocalDateTime;
-    import java.time.format.DateTimeFormatter;
-    import java.util.Map;
-    import javax.swing.JFileChooser;
-    import javax.swing.JOptionPane;
-    import org.apache.poi.ss.usermodel.Cell;
-    import org.apache.poi.ss.usermodel.Row;
-    import org.apache.poi.ss.usermodel.Sheet;
-    import org.apache.poi.ss.usermodel.Workbook;
-    import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-
-
-
-
-
-
-
+import Servicio.GestionEmpleado;
+import Interfaz.LoginPanel;
+import Modelo.DAO.ActividadEmpleadoDAO;
+import Modelo.DAO.CategoriaDAO;
+import Modelo.Entidades.Categoria;
+import Modelo.Entidades.Empleado;
+import Modelo.Entidades.Usuario;
+import Servicio.GestionCategoria;
+import Servicio.GestionIncidente;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import java.awt.Image;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableModel;
+import static proyectoFinal.gestionTickets.Main.usuario;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class VistaMetricas extends javax.swing.JFrame {
 
@@ -121,21 +112,18 @@ public class VistaMetricas extends javax.swing.JFrame {
             }
         }
     }
-  
- 
-   
 
     public void mostrarHistorialEmpleado() {
-  
+
         int filaSeleccionada = tableListaEmpleado.getSelectedRow();
         if (filaSeleccionada != -1) {
-       
+
             String nombreCompleto = tableListaEmpleado.getValueAt(filaSeleccionada, 0).toString();
 
             List<Object[]> incidentes = gestionEmpleado.obtenerIncidentesPorEmpleado(nombreCompleto);
 
             DefaultTableModel modeloHistorial = (DefaultTableModel) tableHistorial.getModel();
-            modeloHistorial.setRowCount(0); 
+            modeloHistorial.setRowCount(0);
 
             for (Object[] incidente : incidentes) {
                 modeloHistorial.addRow(incidente);
@@ -750,125 +738,124 @@ public class VistaMetricas extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_lbVistaHistorialMouseClicked
-private PdfPCell crearCelda(String texto, Font fuente, boolean esEncabezado) {
-    PdfPCell celda = new PdfPCell(new Phrase(texto, fuente));
-    celda.setHorizontalAlignment(Element.ALIGN_CENTER);
-    celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
-    if (esEncabezado) {
-        celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+    private PdfPCell crearCelda(String texto, Font fuente, boolean esEncabezado) {
+        PdfPCell celda = new PdfPCell(new Phrase(texto, fuente));
+        celda.setHorizontalAlignment(Element.ALIGN_CENTER);
+        celda.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        if (esEncabezado) {
+            celda.setBackgroundColor(BaseColor.LIGHT_GRAY);
+        }
+        return celda;
     }
-    return celda;
-}
 
     private void btExportarPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportarPDFActionPerformed
-    Document documento = new Document();
+        Document documento = new Document();
 
-try {
-    
-    String nombreCompleto = txtNombreCompleto.getText(); 
-    String nombreArchivo = nombreCompleto.replaceAll("\\s+", "_"); 
+        try {
 
-    String userHome = System.getProperty("user.home");
-    String ruta = userHome + File.separator + "Desktop" + File.separator + "reporte_" + nombreArchivo + ".pdf";
-    
-    PdfWriter.getInstance(documento, new FileOutputStream(ruta));
-    documento.open();
- 
-    Font tituloFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD, BaseColor.RED);
-    Font subTituloFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD, BaseColor.RED);
-    Font textoNormal = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
-    Font fechaFont = new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC, BaseColor.BLUE);
+            String nombreCompleto = txtNombreCompleto.getText();
+            String nombreArchivo = nombreCompleto.replaceAll("\\s+", "_");
 
-    Paragraph titulo = new Paragraph("REPORTE DE MÉTRICAS", tituloFont);
-    titulo.setAlignment(Element.ALIGN_CENTER);
-    documento.add(titulo);
+            String userHome = System.getProperty("user.home");
+            String ruta = "D:\\Backup\\Escritorio\\" + "reporte_" + nombreArchivo + ".pdf";
 
-    documento.add(Chunk.NEWLINE);
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta));
+            documento.open();
 
-    LocalDateTime ahora = LocalDateTime.now();
-    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy ' ['HH:mm:ss']'");
-    Paragraph fecha = new Paragraph("Fecha y hora de generación: " + ahora.format(formato), fechaFont);
-    fecha.setAlignment(Element.ALIGN_RIGHT);
-    documento.add(fecha);
+            Font tituloFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD, BaseColor.RED);
+            Font subTituloFont = new Font(Font.FontFamily.HELVETICA, 15, Font.BOLD, BaseColor.RED);
+            Font textoNormal = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
+            Font fechaFont = new Font(Font.FontFamily.HELVETICA, 10, Font.ITALIC, BaseColor.BLUE);
 
-    documento.add(Chunk.NEWLINE);
-    documento.add(Chunk.NEWLINE);
+            Paragraph titulo = new Paragraph("REPORTE DE MÉTRICAS", tituloFont);
+            titulo.setAlignment(Element.ALIGN_CENTER);
+            documento.add(titulo);
 
-    String idEmpleado = txtIdEmpleado.getText();
-    String celular = txtCelular.getText();
+            documento.add(Chunk.NEWLINE);
 
-    documento.add(new Paragraph("Datos del Empleado", subTituloFont));
-    documento.add(Chunk.NEWLINE);
-    documento.add(new Paragraph("ID del Empleado: " + idEmpleado, textoNormal));
-    documento.add(new Paragraph("Nombre Completo: " + nombreCompleto, textoNormal));
-    documento.add(new Paragraph("Celular: " + celular, textoNormal));
+            LocalDateTime ahora = LocalDateTime.now();
+            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy ' ['HH:mm:ss']'");
+            Paragraph fecha = new Paragraph("Fecha y hora de generación: " + ahora.format(formato), fechaFont);
+            fecha.setAlignment(Element.ALIGN_RIGHT);
+            documento.add(fecha);
 
-    CategoriaDAO categoriaDAO = new CategoriaDAO();
-    String categoriaEmpleado = categoriaDAO.obtenerCategoriaPorEmpleado(Integer.parseInt(idEmpleado));
-    documento.add(new Paragraph("Categoría: " + categoriaEmpleado, textoNormal));
+            documento.add(Chunk.NEWLINE);
+            documento.add(Chunk.NEWLINE);
 
-    documento.add(Chunk.NEWLINE);
-    documento.add(Chunk.NEWLINE);
+            String idEmpleado = txtIdEmpleado.getText();
+            String celular = txtCelular.getText();
 
-    // 🔽 Sección de tickets finalizados
-    ActividadEmpleadoDAO actividadDAO = new ActividadEmpleadoDAO();
-    List<Map<String, Object>> ticketsFinalizados = actividadDAO.obtenerTicketsFinalizadosPorEmpleado(Integer.parseInt(idEmpleado));
+            documento.add(new Paragraph("Datos del Empleado", subTituloFont));
+            documento.add(Chunk.NEWLINE);
+            documento.add(new Paragraph("ID del Empleado: " + idEmpleado, textoNormal));
+            documento.add(new Paragraph("Nombre Completo: " + nombreCompleto, textoNormal));
+            documento.add(new Paragraph("Celular: " + celular, textoNormal));
 
-    documento.add(new Paragraph("Historial de Tickets Finalizados", subTituloFont));
-    documento.add(Chunk.NEWLINE);
+            CategoriaDAO categoriaDAO = new CategoriaDAO();
+            String categoriaEmpleado = categoriaDAO.obtenerCategoriaPorEmpleado(Integer.parseInt(idEmpleado));
+            documento.add(new Paragraph("Categoría: " + categoriaEmpleado, textoNormal));
 
-    if (!ticketsFinalizados.isEmpty()) {
-        PdfPTable tablaTickets = new PdfPTable(5);
-        tablaTickets.setWidthPercentage(100);
-        tablaTickets.setWidths(new float[]{1, 2, 3, 2, 2});
+            documento.add(Chunk.NEWLINE);
+            documento.add(Chunk.NEWLINE);
 
-        tablaTickets.addCell(crearCelda("ID", textoNormal, true));
-        tablaTickets.addCell(crearCelda("Categoría", textoNormal, true));
-        tablaTickets.addCell(crearCelda("Descripción", textoNormal, true));
-        tablaTickets.addCell(crearCelda("Aula", textoNormal, true));
-        tablaTickets.addCell(crearCelda("Tiempo (min)", textoNormal, true));
+            // 🔽 Sección de tickets finalizados
+            ActividadEmpleadoDAO actividadDAO = new ActividadEmpleadoDAO();
+            List<Map<String, Object>> ticketsFinalizados = actividadDAO.obtenerTicketsFinalizadosPorEmpleado(Integer.parseInt(idEmpleado));
 
-        for (Map<String, Object> ticket : ticketsFinalizados) {
-            tablaTickets.addCell(crearCelda(ticket.get("id_incidente").toString(), textoNormal, false));
-            tablaTickets.addCell(crearCelda(ticket.get("categoria").toString(), textoNormal, false));
-            tablaTickets.addCell(crearCelda(ticket.get("descripcion").toString(), textoNormal, false));
-            tablaTickets.addCell(crearCelda(ticket.get("aula").toString(), textoNormal, false));
-            tablaTickets.addCell(crearCelda(ticket.get("tiempo_resolucion").toString(), textoNormal, false));
+            documento.add(new Paragraph("Historial de Tickets Finalizados", subTituloFont));
+            documento.add(Chunk.NEWLINE);
+
+            if (!ticketsFinalizados.isEmpty()) {
+                PdfPTable tablaTickets = new PdfPTable(5);
+                tablaTickets.setWidthPercentage(100);
+                tablaTickets.setWidths(new float[]{1, 2, 3, 2, 2});
+
+                tablaTickets.addCell(crearCelda("ID", textoNormal, true));
+                tablaTickets.addCell(crearCelda("Categoría", textoNormal, true));
+                tablaTickets.addCell(crearCelda("Descripción", textoNormal, true));
+                tablaTickets.addCell(crearCelda("Aula", textoNormal, true));
+                tablaTickets.addCell(crearCelda("Tiempo (min)", textoNormal, true));
+
+                for (Map<String, Object> ticket : ticketsFinalizados) {
+                    tablaTickets.addCell(crearCelda(ticket.get("id_incidente").toString(), textoNormal, false));
+                    tablaTickets.addCell(crearCelda(ticket.get("categoria").toString(), textoNormal, false));
+                    tablaTickets.addCell(crearCelda(ticket.get("descripcion").toString(), textoNormal, false));
+                    tablaTickets.addCell(crearCelda(ticket.get("aula").toString(), textoNormal, false));
+                    tablaTickets.addCell(crearCelda(ticket.get("tiempo_resolucion").toString(), textoNormal, false));
+                }
+
+                documento.add(tablaTickets);
+
+                int totalTickets = ticketsFinalizados.size();
+                int tiempoPromedio = (int) ticketsFinalizados.stream()
+                        .mapToInt(t -> Integer.parseInt(t.get("tiempo_resolucion").toString()))
+                        .average()
+                        .orElse(0);
+
+                documento.add(Chunk.NEWLINE);
+                documento.add(new Paragraph("Total de tickets finalizados: " + totalTickets, textoNormal));
+                documento.add(new Paragraph("Tiempo promedio de resolución: " + tiempoPromedio + " minutos", textoNormal));
+
+            } else {
+                documento.add(new Paragraph("El empleado no tiene tickets finalizados.", textoNormal));
+            }
+
+            documento.add(Chunk.NEWLINE);
+            documento.add(Chunk.NEWLINE);
+
+            documento.close();
+            Desktop.getDesktop().open(new File(ruta));
+
+            JOptionPane.showMessageDialog(this, "PDF generado exitosamente en:\n" + ruta);
+
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al generar el PDF:\n" + e.getMessage());
         }
 
-        documento.add(tablaTickets);
-
-        int totalTickets = ticketsFinalizados.size();
-        int tiempoPromedio = (int) ticketsFinalizados.stream()
-                .mapToInt(t -> Integer.parseInt(t.get("tiempo_resolucion").toString()))
-                .average()
-                .orElse(0);
-
-        documento.add(Chunk.NEWLINE);
-        documento.add(new Paragraph("Total de tickets finalizados: " + totalTickets, textoNormal));
-        documento.add(new Paragraph("Tiempo promedio de resolución: " + tiempoPromedio + " minutos", textoNormal));
-
-    } else {
-        documento.add(new Paragraph("El empleado no tiene tickets finalizados.", textoNormal));
-    }
-
-    documento.add(Chunk.NEWLINE);
-    documento.add(Chunk.NEWLINE);
-
-    documento.close();
-    Desktop.getDesktop().open(new File(ruta));
-
-    JOptionPane.showMessageDialog(this, "PDF generado exitosamente en:\n" + ruta);
-
-} catch (DocumentException | IOException e) {
-    e.printStackTrace();
-    JOptionPane.showMessageDialog(this, "Error al generar el PDF:\n" + e.getMessage());
-}
-
     }//GEN-LAST:event_btExportarPDFActionPerformed
-  
-    
-    
+
+
     private void txtPromedioRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPromedioRespuestaActionPerformed
 
     }//GEN-LAST:event_txtPromedioRespuestaActionPerformed
@@ -891,71 +878,67 @@ try {
 
     private void btExportarExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportarExcelActionPerformed
         String url = "jdbc:mysql://localhost:3306/sistemaIncidencias";
-    String usuario = "root"; 
-    String contrasena = "180701";  
+        String usuario = "root";
+        String contrasena = "75000454jd";
 
-    String sql = "SELECT e.id_empleado, e.nombre, e.apellido, c.nombre AS categoria, " +
-                 "e.estado, e.celular " +
-                 "FROM empleado e LEFT JOIN categoria c ON e.id_categoria = c.id_categoria" ;
+        String sql = "SELECT e.id_empleado, e.nombre, e.apellido, c.nombre AS categoria, "
+                + "e.estado, e.celular "
+                + "FROM empleado e LEFT JOIN categoria c ON e.id_categoria = c.id_categoria";
 
-    try (
-        Connection conn = DriverManager.getConnection(url, usuario, contrasena);
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-        Workbook workbook = new XSSFWorkbook()
-    ) {
-        Sheet sheet = workbook.createSheet("Empleados");
+        try (
+                Connection conn = DriverManager.getConnection(url, usuario, contrasena); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql); Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.createSheet("Empleados");
 
-        // Encabezados
-        Row header = sheet.createRow(0);
-        String[] columnas = {"ID", "Nombre", "Apellido", "Categoría", "Estado", "Celular"};
+            // Encabezados
+            Row header = sheet.createRow(0);
+            String[] columnas = {"ID", "Nombre", "Apellido", "Categoría", "Estado", "Celular"};
 
-        for (int i = 0; i < columnas.length; i++) {
-            Cell cell = header.createCell(i);
-            cell.setCellValue(columnas[i]);
-        }
-
-        // Datos
-        int rowIndex = 1;
-        while (rs.next()) {
-            Row row = sheet.createRow(rowIndex++);
-            row.createCell(0).setCellValue(rs.getInt("id_empleado"));
-            row.createCell(1).setCellValue(rs.getString("nombre"));
-            row.createCell(2).setCellValue(rs.getString("apellido"));
-            row.createCell(3).setCellValue(rs.getString("categoria"));
-            row.createCell(4).setCellValue(rs.getString("estado"));
-            row.createCell(5).setCellValue(rs.getString("celular"));
-        }
-
-        // Ajuste de ancho de columnas
-        for (int i = 0; i < columnas.length; i++) {
-            sheet.autoSizeColumn(i);
-        }
-
-        // Guardar archivo
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Guardar archivo Excel");
-        int userSelection = fileChooser.showSaveDialog(this);
-
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-            if (!fileToSave.getName().toLowerCase().endsWith(".xlsx")) {
-                fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
+            for (int i = 0; i < columnas.length; i++) {
+                Cell cell = header.createCell(i);
+                cell.setCellValue(columnas[i]);
             }
 
-            try (FileOutputStream fileOut = new FileOutputStream(fileToSave)) {
-                workbook.write(fileOut);
-                JOptionPane.showMessageDialog(this, "Archivo Excel exportado correctamente.");
+            // Datos
+            int rowIndex = 1;
+            while (rs.next()) {
+                Row row = sheet.createRow(rowIndex++);
+                row.createCell(0).setCellValue(rs.getInt("id_empleado"));
+                row.createCell(1).setCellValue(rs.getString("nombre"));
+                row.createCell(2).setCellValue(rs.getString("apellido"));
+                row.createCell(3).setCellValue(rs.getString("categoria"));
+                row.createCell(4).setCellValue(rs.getString("estado"));
+                row.createCell(5).setCellValue(rs.getString("celular"));
             }
-        }
 
-    } catch (SQLException | IOException e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al exportar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }  
+            // Ajuste de ancho de columnas
+            for (int i = 0; i < columnas.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            // Guardar archivo
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar archivo Excel");
+            int userSelection = fileChooser.showSaveDialog(this);
+
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                File fileToSave = fileChooser.getSelectedFile();
+                if (!fileToSave.getName().toLowerCase().endsWith(".xlsx")) {
+                    fileToSave = new File(fileToSave.getAbsolutePath() + ".xlsx");
+                }
+
+                try (FileOutputStream fileOut = new FileOutputStream(fileToSave)) {
+                    workbook.write(fileOut);
+                    JOptionPane.showMessageDialog(this, "Archivo Excel exportado correctamente.");
+                }
+            }
+
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al exportar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
     }//GEN-LAST:event_btExportarExcelActionPerformed
-        
+
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));
         Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);

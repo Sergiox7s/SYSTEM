@@ -2,6 +2,7 @@ Interfaz\Admin\VistaColaIncidente$2.class
 Servicio\GestionCategoria.class
 Interfaz\SuperAdm\SupAdmAjustes$1.class
 Modelo\DAO\ActividadEmpleadoDAO.class
+Interfaz\SoporteEquipo\VistaEmpleado$2.class
 Servicio\Session.class
 Modelo\DAO\CategoriaDAO.class
 Interfaz\Admin\VistaHistorial$2.class
@@ -68,6 +69,7 @@ Interfaz\Admin\VistaDetalleTicket.class
 Interfaz\Admin\VistaHistorial$6.class
 Interfaz\Admin\VistaMetricas$7.class
 Modelo\Entidades\Categoria.class
+Interfaz\SoporteEquipo\VistaEmpleado$3.class
 Modelo\DAO\EmpleadoDAO.class
 Interfaz\Admin\VistaColaIncidente$3.class
 Interfaz\SuperAdm\SuperAdmCategorias$7.class
@@ -87,6 +89,7 @@ Interfaz\Admin\VistaColaIncidente$4.class
 Interfaz\Admin\VistaHistorial$7.class
 Servicio\GestionActividadEmpleado.class
 Interfaz\SuperAdm\SuperAdmUsuarios$2.class
+Interfaz\SoporteEquipo\VistaEmpleado$4.class
 Interfaz\SuperAdm\SuperAdmCategorias.class
 Interfaz\SuperAdm\SuperAdmUsuarios$9.class
 Modelo\DAO\TicketDAO.class

@@ -103,7 +103,8 @@ public class GestionIncidente {
                 nombreCompletoSolicitante,
                 incidente.getFechaReporte(),
                 horaFormateada,
-                fechaFinalizacion
+                incidente.getFechaFinalizacionFormateada() != null
+                ? incidente.getFechaFinalizacionFormateada() : "No finalizado"
             });
         }
 

@@ -1,6 +1,7 @@
 package Modelo.Entidades;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Incidente {
@@ -15,6 +16,8 @@ public class Incidente {
     private LocalTime horaReporte;
     private Usuario solicita;
     private Empleado asignadoA;
+    private LocalDateTime fechaHoraFinalizado;
+    private String fechaFinalizacionFormateada;
 
     public Usuario getSolicita() {
         return solicita;
@@ -140,5 +143,20 @@ public class Incidente {
 
     public void setEmpleadoAsignado(Empleado empleadoAsignado) {
         this.asignadoA = empleadoAsignado;
+    }
+    public LocalDateTime getFechaHoraFinalizado() {
+        return fechaHoraFinalizado;
+    }
+    
+    public void setFechaHoraFinalizado(LocalDateTime fechaHoraFinalizado) {
+        this.fechaHoraFinalizado = fechaHoraFinalizado;
+    }
+    
+    public String getFechaFinalizacionFormateada() {
+        return fechaFinalizacionFormateada;
+    }
+    
+    public void setFechaFinalizacionFormateada(String fechaFinalizacionFormateada) {
+        this.fechaFinalizacionFormateada = fechaFinalizacionFormateada;
     }
 }
