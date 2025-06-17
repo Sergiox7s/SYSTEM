@@ -15,14 +15,14 @@
             <url>file:${project.basedir}/lib</url>
         </repository>
     </repositories>
-        <!-- primera dependecia es PDF -->
+    <!-- primera dependecia es PDF -->
 
     <dependencies>
         
-         <dependency>
-        <groupId>com.lowagie</groupId>
-        <artifactId>itext</artifactId>
-        <version>2.1.7</version>
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7</version>
         </dependency>
         
         <dependency>
@@ -65,6 +65,11 @@
             <artifactId>itext5-itextpdf-5.5.12</artifactId>
             <version>1.0.0</version>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.5.3</version>
         </dependency>
     </dependencies>
     

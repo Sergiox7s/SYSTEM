@@ -5,6 +5,7 @@ import Modelo.DAO.IncidenteDAO;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -111,9 +112,7 @@ public class GestionIncidente {
         tabla.setModel(model);
     }
 
-    /**
-     * ********* Vista Metricas
-     */
+    
     public int obtenerTotalIncidentes() {
         return incidenteDAO.obtenerTotalIncidentes();
     }
@@ -145,4 +144,7 @@ public class GestionIncidente {
         return tiempoFormateado;
     }
 
+    public Map<Integer, Integer> obtenerEstadisticasPorMes(int año, int idUsuario) {
+        return incidenteDAO.obtenerIncidentesFinalizadosPorMes(año, idUsuario);
+    }
 }

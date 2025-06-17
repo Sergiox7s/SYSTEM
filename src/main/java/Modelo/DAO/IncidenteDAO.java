@@ -14,9 +14,9 @@ import java.util.Queue;
 import javax.swing.JOptionPane;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+import java.util.Map;
 
 public class IncidenteDAO {
 
@@ -600,5 +600,54 @@ public class IncidenteDAO {
 
         return tiempoPromedio;
     }
+    
+    public Map<Integer, Integer> obtenerIncidentesFinalizadosPorMes(int año, int idUsuario) {
+    Map<Integer, Integer> incidentesPorMes = new HashMap<>();
+    Conexiondb conexionDB = new Conexiondb();
+    Connection con = null;
+
+    try {
+        con = conexionDB.establecerConexion();
+        String query = """
+            SELECT 
+                MONTH(a.fecha_resolucion) as mes,
+                COUNT(*) as cantidad
+            FROM incidente i
+            JOIN actividad_empleado a ON i.id_incidente = a.id_incidente
+            JOIN empleado e ON i.id_empleado_asignado = e.id_empleado
+            WHERE YEAR(a.fecha_resolucion) = ? 
+            AND i.estado = 'finalizado'
+            AND e.id_usuario = ?
+            GROUP BY MONTH(a.fecha_resolucion)
+            ORDER BY mes;
+        """;
+
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, año);
+        ps.setInt(2, idUsuario);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int mes = rs.getInt("mes");
+            int cantidad = rs.getInt("cantidad");
+            incidentesPorMes.put(mes, cantidad);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw new RuntimeException("Error al obtener estadísticas por mes: " + e.getMessage());
+    } finally {
+        if (con != null) {
+            conexionDB.cerrarConexion();
+        }
+    }
+
+    // Rellenar meses sin incidentes con 0
+    for (int mes = 1; mes <= 12; mes++) {
+        incidentesPorMes.putIfAbsent(mes, 0);
+    }
+
+    return incidentesPorMes;
+}
+    
 
 }

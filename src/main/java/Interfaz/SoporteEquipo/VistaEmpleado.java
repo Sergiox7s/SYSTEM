@@ -15,6 +15,7 @@ import Modelo.Entidades.Incidente;
 import Modelo.Entidades.Usuario;
 import Servicio.GestionIncidente;
 import java.awt.Image;
+import javax.swing.ImageIcon;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -26,6 +27,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import static proyectoFinal.gestionTickets.Main.usuario;
 
 /**
  *
@@ -62,6 +64,9 @@ public class VistaEmpleado extends java.awt.Frame {
         SetImageButton(jButton3, "/Img/checkgreen.png");
         SetImageButton(jButton4, "/Img/reporteAnual.png");
         actualizarVista();
+        SetImageLabel(jLabel5, "/Img/tecnicos.jpg");
+        
+        
     }
 
     public void cargarTicketsUsuario(int idUsuario) {
@@ -147,13 +152,13 @@ public class VistaEmpleado extends java.awt.Frame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableTicketActual = new javax.swing.JTable();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -164,6 +169,7 @@ public class VistaEmpleado extends java.awt.Frame {
         jPanel7 = new javax.swing.JPanel();
         lblASIGNADOS = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -210,9 +216,11 @@ public class VistaEmpleado extends java.awt.Frame {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 180, 150));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("DISPONIBILIDAD");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 150, 20));
 
+        tableTicketActual.setForeground(new java.awt.Color(51, 153, 255));
         tableTicketActual.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null, null},
@@ -228,12 +236,7 @@ public class VistaEmpleado extends java.awt.Frame {
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 970, 340));
 
-        jLabel7.setText("PENDIENTES");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 20, -1, -1));
-
-        jLabel8.setText("COMPLETADOS");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 20, -1, -1));
-
+        jPanel3.setBackground(new java.awt.Color(204, 255, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel11.setText("REPORTES ANUAL");
@@ -256,9 +259,20 @@ public class VistaEmpleado extends java.awt.Frame {
         jPanel3.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 130, 110));
 
         jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/reporteAnual.png"))); // NOI18N
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jPanel3.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 50, 120, 110));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 0, 440, 180));
+        jLabel8.setText("COMPLETADOS");
+        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, -1, -1));
+
+        jLabel7.setText("PENDIENTES");
+        jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, 420, 170));
 
         jLabel10.setText("FINALIZAR TICKET");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 200, 110, 30));
@@ -283,6 +297,7 @@ public class VistaEmpleado extends java.awt.Frame {
         });
         jPanel1.add(btnFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 240, 90, 80));
 
+        lbFecha.setForeground(new java.awt.Color(255, 255, 255));
         lbFecha.setText("jLabel5");
         jPanel1.add(lbFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 140, 30));
 
@@ -303,6 +318,10 @@ public class VistaEmpleado extends java.awt.Frame {
         jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 110, 40));
 
         jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 212, 45));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/tecnicos.jpg"))); // NOI18N
+        jLabel5.setText("jLabel5");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 600));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1100, 600));
 
@@ -379,6 +398,14 @@ public class VistaEmpleado extends java.awt.Frame {
         
         
     }//GEN-LAST:event_btnFinalizarActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        VistaPersonal vp = new VistaPersonal(this.u);
+
+        vp.setVisible(true);
+        vp.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
     
     
 
@@ -398,7 +425,7 @@ public class VistaEmpleado extends java.awt.Frame {
         );
         button.setIcon(new ImageIcon(img)); // Establece la imagen en el botón
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton jButton2;
@@ -414,6 +441,7 @@ public class VistaEmpleado extends java.awt.Frame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

@@ -757,8 +757,8 @@ public class VistaMetricas extends javax.swing.JFrame {
             String nombreArchivo = nombreCompleto.replaceAll("\\s+", "_");
 
             String userHome = System.getProperty("user.home");
-            // ruta juan [ String ruta = "D:\\Backup\\Escritorio\\" + "reporte_" + nombreArchivo + ".pdf";]
-                String ruta = userHome + File.separator + "Desktop" + File.separator + "reporte_" + nombreArchivo + ".pdf";
+            String ruta = "D:\\Backup\\Escritorio\\" + "reporte_" + nombreArchivo + ".pdf";
+                //String ruta = userHome + File.separator + "Desktop" + File.separator + "reporte_" + nombreArchivo + ".pdf";
             
             
 
