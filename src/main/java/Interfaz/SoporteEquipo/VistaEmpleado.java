@@ -160,10 +160,6 @@ public class VistaEmpleado extends java.awt.Frame {
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
         btnFinalizar = new javax.swing.JButton();
         lbFecha = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
@@ -234,7 +230,7 @@ public class VistaEmpleado extends java.awt.Frame {
         ));
         jScrollPane1.setViewportView(tableTicketActual);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 970, 340));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 970, 380));
 
         jPanel3.setBackground(new java.awt.Color(204, 255, 255));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -276,18 +272,6 @@ public class VistaEmpleado extends java.awt.Frame {
 
         jLabel10.setText("FINALIZAR TICKET");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 200, 110, 30));
-
-        jLabel12.setText("#Pagina");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 550, -1, -1));
-
-        jLabel13.setText("Total de registro Por pagina");
-        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 550, -1, -1));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 550, 140, -1));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 550, 150, -1));
 
         btnFinalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/completado.png"))); // NOI18N
         btnFinalizar.addActionListener(new java.awt.event.ActionListener() {
@@ -431,13 +415,9 @@ public class VistaEmpleado extends java.awt.Frame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

@@ -2,7 +2,10 @@ package Interfaz.SoporteEquipo;
 
 import Modelo.Entidades.Usuario;
 import Servicio.GestionIncidente;
+import java.awt.Image;
 import java.util.Map;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -19,73 +22,93 @@ public class VistaPersonal extends javax.swing.JFrame {
         this.usuario = usuario;
         this.gestionIncidente = new GestionIncidente();
         initComponents();
+
+        panelGrafico.setLayout(new java.awt.BorderLayout());
+        panelGrafico.setPreferredSize(new java.awt.Dimension(600, 400));
         cargarEstadisticas();
+        SetImageLabel(jLabel14, "/Img/cieloblanco.jpg");
     }
 
-        private void cargarEstadisticas() {
+    private void cargarEstadisticas() {
         try {
             Map<Integer, Integer> estadisticas = gestionIncidente.obtenerEstadisticasPorMes(añoActual, usuario.getId());
-            
-            // Calcular total de incidentes para porcentajes
+
             int total = estadisticas.values().stream().mapToInt(Integer::intValue).sum();
-            
-            // Actualizar campos de texto con los porcentajes
+
+            // Actualizar campos con porcentaje y cantidad
             for (int mes = 1; mes <= 12; mes++) {
                 int cantidad = estadisticas.getOrDefault(mes, 0);
                 double porcentaje = total > 0 ? (cantidad * 100.0 / total) : 0;
-                
+
+                String texto = String.format("%.1f%% (%d)", porcentaje, cantidad);
+
                 switch (mes) {
-                    case 1 -> campoEnero.setText(String.format("%.1f%%", porcentaje));
-                    case 2 -> campoFebrero.setText(String.format("%.1f%%", porcentaje));
-                    case 3 -> campoMarzo.setText(String.format("%.1f%%", porcentaje));
-                    case 4 -> campoAbril.setText(String.format("%.1f%%", porcentaje));
-                    case 5 -> campoMayo.setText(String.format("%.1f%%", porcentaje));
-                    case 6 -> campoJunio.setText(String.format("%.1f%%", porcentaje));
-                    case 7 -> campoJulio.setText(String.format("%.1f%%", porcentaje));
-                    case 8 -> campoAgosto.setText(String.format("%.1f%%", porcentaje));
-                    case 9 -> campoSeptiembre.setText(String.format("%.1f%%", porcentaje));
-                    case 10 -> campoOctubre.setText(String.format("%.1f%%", porcentaje));
-                    case 11 -> campoNoviembre.setText(String.format("%.1f%%", porcentaje));
-                    case 12 -> campoDiciembre.setText(String.format("%.1f%%", porcentaje));
+                    case 1 ->
+                        campoEnero.setText(texto);
+                    case 2 ->
+                        campoFebrero.setText(texto);
+                    case 3 ->
+                        campoMarzo.setText(texto);
+                    case 4 ->
+                        campoAbril.setText(texto);
+                    case 5 ->
+                        campoMayo.setText(texto);
+                    case 6 ->
+                        campoJunio.setText(texto);
+                    case 7 ->
+                        campoJulio.setText(texto);
+                    case 8 ->
+                        campoAgosto.setText(texto);
+                    case 9 ->
+                        campoSeptiembre.setText(texto);
+                    case 10 ->
+                        campoOctubre.setText(texto);
+                    case 11 ->
+                        campoNoviembre.setText(texto);
+                    case 12 ->
+                        campoDiciembre.setText(texto);
                 }
             }
-            
-            // Mostrar gráfico
-            mostrarGrafico(estadisticas);
+
+            mostrarGraficoEnPanel(estadisticas);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar estadísticas: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error al cargar estadísticas: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void mostrarGrafico(Map<Integer, Integer> estadisticas) {
+
+    private void mostrarGraficoEnPanel(Map<Integer, Integer> estadisticas) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
             "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
-        
+
         for (int mes = 1; mes <= 12; mes++) {
-            int cantidad = estadisticas.getOrDefault(mes, 0);
-            dataset.addValue(cantidad, "Incidentes", meses[mes - 1]);
+            dataset.addValue(estadisticas.getOrDefault(mes, 0), "Incidentes", meses[mes - 1]);
         }
-        
+
         JFreeChart chart = ChartFactory.createBarChart(
-            "Incidentes Completados por Mes - Año " + añoActual,
-            "Mes",
-            "Cantidad de Incidentes",
-            dataset
+                "Incidentes Completados por Mes - Año " + añoActual,
+                "Mes",
+                "Cantidad de Incidentes",
+                dataset
         );
-        
+
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
-        
-        // Crear ventana para el gráfico
-        javax.swing.JFrame frameGrafico = new javax.swing.JFrame("Estadísticas de Incidentes");
-        frameGrafico.setContentPane(chartPanel);
-        frameGrafico.pack();
-        frameGrafico.setLocationRelativeTo(this);
-        frameGrafico.setVisible(true);
+        chartPanel.setPreferredSize(new java.awt.Dimension(600, 400));
+
+        // Limpiar y actualizar el panel
+        panelGrafico.removeAll();
+        panelGrafico.add(chartPanel, java.awt.BorderLayout.CENTER);
+        panelGrafico.revalidate();
+        panelGrafico.repaint();
+
     }
-    
+
+    public void SetImageLabel(JLabel label, String path) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(path));
+        Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
+        label.setIcon(new ImageIcon(img));
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -118,236 +141,172 @@ public class VistaPersonal extends javax.swing.JFrame {
         campoNoviembre = new javax.swing.JTextField();
         campoDiciembre = new javax.swing.JTextField();
         panelGrafico = new javax.swing.JPanel();
+        btnAtras = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Graficos De Incidentes por Mes");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(339, 32, 300, 25));
 
         jLabel2.setText("ENERO %");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 75, 65, 27));
 
         jLabel3.setText("FEBRERO %");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 108, 65, 27));
 
         jLabel4.setText("MARZO %");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 141, 65, 27));
 
         jLabel5.setText("ABRIL %");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 174, 65, 27));
 
         jLabel6.setText("MAYO %");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 207, 65, 27));
 
         jLabel7.setText("JUNIO %");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 240, 65, 27));
 
         jLabel8.setText("JULIO %");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 273, 65, 27));
 
         jLabel9.setText("AGOSTO %");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 306, 65, 27));
 
         jLabel10.setText("SETIEMBRE %");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 339, -1, 29));
 
         jLabel11.setText("OCTUBRE %");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 374, 65, 29));
 
         jLabel12.setText("NOVIEMBRE %");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 409, -1, 29));
 
         jLabel13.setText("DICIEMBRE %");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 444, 78, 29));
 
         campoEnero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoEneroActionPerformed(evt);
             }
         });
+        jPanel1.add(campoEnero, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 77, 90, -1));
 
         campoFebrero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoFebreroActionPerformed(evt);
             }
         });
+        jPanel1.add(campoFebrero, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 110, 90, -1));
 
         campoMarzo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoMarzoActionPerformed(evt);
             }
         });
+        jPanel1.add(campoMarzo, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 143, 90, -1));
 
         campoAbril.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoAbrilActionPerformed(evt);
             }
         });
+        jPanel1.add(campoAbril, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 176, 90, -1));
 
         campoMayo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoMayoActionPerformed(evt);
             }
         });
+        jPanel1.add(campoMayo, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 209, 90, -1));
 
         campoJunio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoJunioActionPerformed(evt);
             }
         });
+        jPanel1.add(campoJunio, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 242, 90, -1));
 
         campoJulio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoJulioActionPerformed(evt);
             }
         });
+        jPanel1.add(campoJulio, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 275, 90, -1));
 
         campoAgosto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoAgostoActionPerformed(evt);
             }
         });
+        jPanel1.add(campoAgosto, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 308, 90, -1));
 
         campoSeptiembre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoSeptiembreActionPerformed(evt);
             }
         });
+        jPanel1.add(campoSeptiembre, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 342, 90, -1));
 
         campoOctubre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoOctubreActionPerformed(evt);
             }
         });
+        jPanel1.add(campoOctubre, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 377, 90, -1));
 
         campoNoviembre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoNoviembreActionPerformed(evt);
             }
         });
+        jPanel1.add(campoNoviembre, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 412, 90, -1));
 
         campoDiciembre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 campoDiciembreActionPerformed(evt);
             }
         });
+        jPanel1.add(campoDiciembre, new org.netbeans.lib.awtextra.AbsoluteConstraints(156, 447, 90, -1));
 
         javax.swing.GroupLayout panelGraficoLayout = new javax.swing.GroupLayout(panelGrafico);
         panelGrafico.setLayout(panelGraficoLayout);
         panelGraficoLayout.setHorizontalGroup(
             panelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 592, Short.MAX_VALUE)
+            .addGap(0, 760, Short.MAX_VALUE)
         );
         panelGraficoLayout.setVerticalGroup(
             panelGraficoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 451, Short.MAX_VALUE)
+            .addGap(0, 480, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(339, 339, 339)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jLabel12))))
-                        .addGap(29, 29, 29)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(campoEnero, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoFebrero, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoMarzo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoAbril, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoMayo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoJunio, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoJulio, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoAgosto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoSeptiembre, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoOctubre, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoNoviembre, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoDiciembre, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(53, 53, 53)
-                        .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoEnero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoFebrero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoMarzo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoAbril, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoMayo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoJunio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoJulio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoAgosto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoSeptiembre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoOctubre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoNoviembre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(campoDiciembre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(panelGrafico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(75, Short.MAX_VALUE))
-        );
+        jPanel1.add(panelGrafico, new org.netbeans.lib.awtextra.AbsoluteConstraints(259, 75, 760, 480));
+
+        btnAtras.setText("ATRAS");
+        btnAtras.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnAtras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAtrasActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnAtras, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 510, 120, 30));
+
+        jLabel14.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/cieloBlanco.jpg"))); // NOI18N
+        jLabel14.setText("asdas");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1030, 580));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -401,8 +360,23 @@ public class VistaPersonal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_campoDiciembreActionPerformed
 
+    private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
+        regresarAVistaAnterior();
+
+    }//GEN-LAST:event_btnAtrasActionPerformed
+
+    private void regresarAVistaAnterior() {
+        // Cierra la ventana actual
+        this.dispose();
+
+        // Crea y muestra la ventana anterior (VistaEmpleado)
+        VistaEmpleado vistaAnterior = new VistaEmpleado(this.usuario);
+        vistaAnterior.setVisible(true);
+        vistaAnterior.setLocationRelativeTo(null);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAtras;
     private javax.swing.JTextField campoAbril;
     private javax.swing.JTextField campoAgosto;
     private javax.swing.JTextField campoDiciembre;
@@ -420,6 +394,7 @@ public class VistaPersonal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
