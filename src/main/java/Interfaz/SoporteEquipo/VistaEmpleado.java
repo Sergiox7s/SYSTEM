@@ -14,7 +14,18 @@ import Modelo.Entidades.Empleado;
 import Modelo.Entidades.Incidente;
 import Modelo.Entidades.Usuario;
 import Servicio.GestionIncidente;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.Image;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.ImageIcon;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -27,6 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import proyectoFinal.gestionTickets.Main;
 import static proyectoFinal.gestionTickets.Main.usuario;
 
 /**
@@ -166,6 +178,7 @@ public class VistaEmpleado extends java.awt.Frame {
         lblASIGNADOS = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        btPersonalPDF = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -268,7 +281,7 @@ public class VistaEmpleado extends java.awt.Frame {
         jLabel7.setText("PENDIENTES");
         jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, 420, 170));
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 0, 440, 170));
 
         jLabel10.setText("FINALIZAR TICKET");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 200, 110, 30));
@@ -305,7 +318,21 @@ public class VistaEmpleado extends java.awt.Frame {
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/tecnicos.jpg"))); // NOI18N
         jLabel5.setText("jLabel5");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1100, 600));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1100, 600));
+
+        btPersonalPDF.setBackground(new java.awt.Color(255, 0, 0));
+        btPersonalPDF.setForeground(new java.awt.Color(255, 255, 255));
+        btPersonalPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
+        btPersonalPDF.setText("[PDF] DE EMPLEADO");
+        btPersonalPDF.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btPersonalPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btPersonalPDF.setFocusPainted(false);
+        btPersonalPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPersonalPDFActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btPersonalPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, 160, 40));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1100, 600));
 
@@ -390,6 +417,79 @@ public class VistaEmpleado extends java.awt.Frame {
         vp.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void btPersonalPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPersonalPDFActionPerformed
+       try {
+        Main.usuario = u;
+
+    Connection conexion = DriverManager.getConnection(
+        "jdbc:mysql://localhost:3306/sistemaIncidencias", "root", "180701"
+    );
+
+    String sqlEmpleado = "SELECT id_empleado, nombre, apellido FROM empleado WHERE id_usuario = ?";
+    PreparedStatement psEmpleado = conexion.prepareStatement(sqlEmpleado);
+           int idUsuario = 10;
+    psEmpleado.setInt(1, idUsuario);
+    ResultSet rsEmpleado = psEmpleado.executeQuery();
+
+    if (rsEmpleado.next()) {
+        int idEmpleado = rsEmpleado.getInt("id_empleado");
+        String nombre = rsEmpleado.getString("nombre");
+        String apellido = rsEmpleado.getString("apellido");
+
+        String sqlMetricas = "SELECT COUNT(*) AS total, " +
+                             "SUM(CASE WHEN i.fecha_hora_finalizado IS NOT NULL THEN 1 ELSE 0 END) AS finalizados " +
+                             "FROM incidente i WHERE i.id_empleado_asignado = ?";
+
+        PreparedStatement psMetricas = conexion.prepareStatement(sqlMetricas);
+        psMetricas.setInt(1, idEmpleado);
+        ResultSet rsMetricas = psMetricas.executeQuery();
+
+        if (rsMetricas.next()) {
+            int totalAsignados = rsMetricas.getInt("total");
+            int totalFinalizados = rsMetricas.getInt("finalizados");
+
+            // 🟣 Crear PDF con estilo
+            Document document = new Document();
+            String nombreArchivo = "metrica_" + nombre + "_" + apellido + ".pdf";
+            String rutaPDF = System.getProperty("user.home") + "\\Downloads\\" + nombreArchivo;
+
+            PdfWriter.getInstance(document, new FileOutputStream(rutaPDF));
+            document.open();
+
+            Font tituloFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
+            Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
+            Font negritaFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+
+            Paragraph titulo = new Paragraph("MÉTRICA PERSONAL DEL TÉCNICO\n\n", tituloFont);
+            titulo.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(titulo);
+
+            document.add(new Paragraph("Nombre del técnico: ", negritaFont));
+            document.add(new Paragraph(nombre + " " + apellido + "\n", normalFont));
+
+            document.add(new Paragraph("Tickets asignados: ", negritaFont));
+            document.add(new Paragraph(String.valueOf(totalAsignados) + "\n", normalFont));
+
+            document.add(new Paragraph("Tickets finalizados: ", negritaFont));
+            document.add(new Paragraph(String.valueOf(totalFinalizados) + "\n", normalFont));
+
+            document.close();
+
+            // 🟢 Abrir PDF automáticamente
+            Desktop.getDesktop().open(new File(rutaPDF));
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "No se encontró un empleado con ese usuario.");
+    }
+
+    conexion.close();
+
+} catch (Exception e) {
+    JOptionPane.showMessageDialog(null, "Error al exportar: " + e.getMessage());
+}
+
+    }//GEN-LAST:event_btPersonalPDFActionPerformed
     
     
 
@@ -411,6 +511,7 @@ public class VistaEmpleado extends java.awt.Frame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btPersonalPDF;
     private javax.swing.JButton btnFinalizar;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -436,4 +537,16 @@ public class VistaEmpleado extends java.awt.Frame {
     private javax.swing.JLabel lblSalirSistema;
     private javax.swing.JTable tableTicketActual;
     // End of variables declaration//GEN-END:variables
+
+    private int obtenerIdUsuarioActual() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    private static class Sesion {
+    public static int idUsuarioActivo = -1; // valor por defecto si no hay sesión iniciada
+
+        public Sesion() {
+            
+        }
+    }
 }
