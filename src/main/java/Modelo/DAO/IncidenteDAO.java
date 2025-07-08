@@ -374,14 +374,15 @@ public class IncidenteDAO {
 
         return incidentesFinalizados;
     }
-    public Map<Integer, Integer> obtenerIncidentesFinalizadosPorMes(int año, int idEmpleado) {
-    Map<Integer, Integer> incidentesPorMes = new HashMap<>();
-    Conexiondb conexionDB = new Conexiondb();
-    Connection con = null;
 
-    try {
-        con = conexionDB.establecerConexion();
-        String query = """
+    public Map<Integer, Integer> obtenerIncidentesFinalizadosPorMes(int año, int idEmpleado) {
+        Map<Integer, Integer> incidentesPorMes = new HashMap<>();
+        Conexiondb conexionDB = new Conexiondb();
+        Connection con = null;
+
+        try {
+            con = conexionDB.establecerConexion();
+            String query = """
             SELECT 
                 MONTH(a.fecha_resolucion) as mes,
                 COUNT(*) as cantidad
@@ -395,32 +396,33 @@ public class IncidenteDAO {
             ORDER BY mes;
         """;
 
-        PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, año);
-        ps.setInt(2, idEmpleado);
-        ResultSet rs = ps.executeQuery();
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.setInt(1, año);
+            ps.setInt(2, idEmpleado);
+            ResultSet rs = ps.executeQuery();
 
-        while (rs.next()) {
-            int mes = rs.getInt("mes");
-            int cantidad = rs.getInt("cantidad");
-            incidentesPorMes.put(mes, cantidad);
+            while (rs.next()) {
+                int mes = rs.getInt("mes");
+                int cantidad = rs.getInt("cantidad");
+                incidentesPorMes.put(mes, cantidad);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al obtener estadísticas por mes: " + e.getMessage());
+        } finally {
+            if (con != null) {
+                conexionDB.cerrarConexion();
+            }
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-        throw new RuntimeException("Error al obtener estadísticas por mes: " + e.getMessage());
-    } finally {
-        if (con != null) {
-            conexionDB.cerrarConexion();
+
+        // Rellenar meses sin incidentes con 0
+        for (int mes = 1; mes <= 12; mes++) {
+            incidentesPorMes.putIfAbsent(mes, 0);
         }
+
+        return incidentesPorMes;
     }
 
-    // Rellenar meses sin incidentes con 0
-    for (int mes = 1; mes <= 12; mes++) {
-        incidentesPorMes.putIfAbsent(mes, 0);
-    }
-
-    return incidentesPorMes;
-}
     public Incidente obtenerIncidentePorId(int idTicket) {
         Conexiondb conexion = new Conexiondb();
         Connection con = conexion.establecerConexion();
@@ -646,7 +648,7 @@ public class IncidenteDAO {
 
         return tiempoPromedio;
     }
-    
+
     /*public Map<Integer, Integer> obtenerIncidentesFinalizadosPorMes(int año, int idUsuario) {
     Map<Integer, Integer> incidentesPorMes = new HashMap<>();
     Conexiondb conexionDB = new Conexiondb();
@@ -694,6 +696,31 @@ public class IncidenteDAO {
 
     return incidentesPorMes;
 }*/
-    
+   public boolean cambiarEstadoTicket(int idTicket, String nuevoEstado) {
+    Connection con = null;
+    PreparedStatement ps = null;
+    try {
+        Conexiondb conexion = new Conexiondb();
+        con = conexion.establecerConexion();
+        
+        String sql = "UPDATE incidente SET estado = ? WHERE id_incidente = ?";
+        ps = con.prepareStatement(sql);
+        ps.setString(1, nuevoEstado);
+        ps.setInt(2, idTicket);
+        
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    } finally {
+        try {
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
 
 }

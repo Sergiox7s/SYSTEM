@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/AWTForms/Frame.java to edit this template
- */
+
 package Interfaz.SoporteEquipo;
 
 import Interfaz.Admin.VistaDetalleTicket;
@@ -74,7 +71,7 @@ public class VistaEmpleado extends java.awt.Frame {
         SetImageButton(btnFinalizar, "/Img/completado.png");
         SetImageButton(jButton2, "/Img/warFile.png");
         SetImageButton(jButton3, "/Img/checkgreen.png");
-        SetImageButton(jButton4, "/Img/reporteAnual.png");
+        SetImageButton(btPersonalPDF, "/Img/pdf.png");
         actualizarVista();
         SetImageLabel(jLabel5, "/Img/tecnicos.jpg");
         
@@ -168,17 +165,18 @@ public class VistaEmpleado extends java.awt.Frame {
         jLabel11 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        btPersonalPDF = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         btnFinalizar = new javax.swing.JButton();
+        btnFinalizar1 = new javax.swing.JButton();
         lbFecha = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         lblASIGNADOS = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        btPersonalPDF = new javax.swing.JButton();
 
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -267,19 +265,25 @@ public class VistaEmpleado extends java.awt.Frame {
         });
         jPanel3.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 130, 110));
 
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/reporteAnual.png"))); // NOI18N
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 50, 120, 110));
-
         jLabel8.setText("COMPLETADOS");
         jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, -1, -1));
 
         jLabel7.setText("PENDIENTES");
         jPanel3.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        btPersonalPDF.setBackground(new java.awt.Color(255, 0, 0));
+        btPersonalPDF.setForeground(new java.awt.Color(255, 255, 255));
+        btPersonalPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/pdf.png"))); // NOI18N
+        btPersonalPDF.setText("[PDF] DE EMPLEADO");
+        btPersonalPDF.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btPersonalPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btPersonalPDF.setFocusPainted(false);
+        btPersonalPDF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPersonalPDFActionPerformed(evt);
+            }
+        });
+        jPanel3.add(btPersonalPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 110, 110));
 
         jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 0, 440, 170));
 
@@ -292,11 +296,26 @@ public class VistaEmpleado extends java.awt.Frame {
                 btnFinalizarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 240, 90, 80));
+        jPanel1.add(btnFinalizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 230, 90, 80));
+
+        btnFinalizar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/completado.png"))); // NOI18N
+        btnFinalizar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFinalizar1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnFinalizar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 380, 90, 80));
 
         lbFecha.setForeground(new java.awt.Color(255, 255, 255));
         lbFecha.setText("jLabel5");
         jPanel1.add(lbFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 140, 30));
+
+        jLabel9.setText("DEVOLVER");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 350, -1, -1));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/tecnicos.jpg"))); // NOI18N
+        jLabel5.setText("jLabel5");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1100, 600));
 
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(134, 173, 17), 2));
@@ -315,24 +334,6 @@ public class VistaEmpleado extends java.awt.Frame {
         jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 0, 110, 40));
 
         jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 212, 45));
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/tecnicos.jpg"))); // NOI18N
-        jLabel5.setText("jLabel5");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 1100, 600));
-
-        btPersonalPDF.setBackground(new java.awt.Color(255, 0, 0));
-        btPersonalPDF.setForeground(new java.awt.Color(255, 255, 255));
-        btPersonalPDF.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
-        btPersonalPDF.setText("[PDF] DE EMPLEADO");
-        btPersonalPDF.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        btPersonalPDF.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btPersonalPDF.setFocusPainted(false);
-        btPersonalPDF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btPersonalPDFActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btPersonalPDF, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 40, 160, 40));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 1100, 600));
 
@@ -410,14 +411,6 @@ public class VistaEmpleado extends java.awt.Frame {
         
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        /*VistaPersonal vp = new VistaPersonal(this.u);
-
-        vp.setVisible(true);
-        vp.setLocationRelativeTo(null);
-        this.dispose();*/
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void btPersonalPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPersonalPDFActionPerformed
        try {
         Main.usuario = u;
@@ -490,6 +483,49 @@ public class VistaEmpleado extends java.awt.Frame {
 }
 
     }//GEN-LAST:event_btPersonalPDFActionPerformed
+
+    private void btnFinalizar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizar1ActionPerformed
+                                                     
+    int selectedRow = tableTicketActual.getSelectedRow();
+
+    if (selectedRow != -1) {
+        int idTicket = (int) tableTicketActual.getValueAt(selectedRow, 0);
+        String estado = (String) tableTicketActual.getValueAt(selectedRow, 5); // Columna de estado
+        
+        // Verificar si el ticket está asignado para cambiarlo a pendiente
+        if (!estado.equalsIgnoreCase("asignado")) {
+            JOptionPane.showMessageDialog(this, "Este ticket no está asignado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String[] opciones = {"Sí", "No"};
+        int confirmacion = JOptionPane.showOptionDialog(
+            this,
+            "¿Está seguro de que desea cambiar este ticket a pendiente?",
+            "Confirmar cambio de estado",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE,
+            null,
+            opciones,
+            opciones[0]
+        );
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            IncidenteDAO incidenteDAO = new IncidenteDAO();
+            boolean actualizado = incidenteDAO.cambiarEstadoTicket(idTicket, "pendiente");
+
+            if (actualizado) {
+                JOptionPane.showMessageDialog(this, "El ticket ha sido cambiado a pendiente exitosamente.");
+                tableTicketActual.setValueAt("pendiente", selectedRow, 5); // Actualizar estado
+                actualizarVista();
+            } else {
+                JOptionPane.showMessageDialog(this, "Hubo un problema al cambiar el estado del ticket.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Por favor, seleccione un incidente.", "Error", JOptionPane.WARNING_MESSAGE);
+    }
+    }//GEN-LAST:event_btnFinalizar1ActionPerformed
     
     
 
@@ -513,9 +549,9 @@ public class VistaEmpleado extends java.awt.Frame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btPersonalPDF;
     private javax.swing.JButton btnFinalizar;
+    private javax.swing.JButton btnFinalizar1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -526,6 +562,7 @@ public class VistaEmpleado extends java.awt.Frame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
