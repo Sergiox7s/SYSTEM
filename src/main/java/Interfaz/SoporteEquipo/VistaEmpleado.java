@@ -384,11 +384,11 @@ public class VistaEmpleado extends java.awt.Frame {
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        VistaPersonal vp = new VistaPersonal(this.u);
+        /*VistaPersonal vp = new VistaPersonal(this.u);
 
         vp.setVisible(true);
         vp.setLocationRelativeTo(null);
-        this.dispose();
+        this.dispose();*/
     }//GEN-LAST:event_jButton4ActionPerformed
     
     

@@ -374,7 +374,53 @@ public class IncidenteDAO {
 
         return incidentesFinalizados;
     }
+    public Map<Integer, Integer> obtenerIncidentesFinalizadosPorMes(int año, int idEmpleado) {
+    Map<Integer, Integer> incidentesPorMes = new HashMap<>();
+    Conexiondb conexionDB = new Conexiondb();
+    Connection con = null;
 
+    try {
+        con = conexionDB.establecerConexion();
+        String query = """
+            SELECT 
+                MONTH(a.fecha_resolucion) as mes,
+                COUNT(*) as cantidad
+            FROM incidente i
+            JOIN actividad_empleado a ON i.id_incidente = a.id_incidente
+            JOIN empleado e ON i.id_empleado_asignado = e.id_empleado
+            WHERE YEAR(a.fecha_resolucion) = ? 
+            AND i.estado = 'finalizado'
+            AND e.id_empleado = ?
+            GROUP BY MONTH(a.fecha_resolucion)
+            ORDER BY mes;
+        """;
+
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, año);
+        ps.setInt(2, idEmpleado);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            int mes = rs.getInt("mes");
+            int cantidad = rs.getInt("cantidad");
+            incidentesPorMes.put(mes, cantidad);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        throw new RuntimeException("Error al obtener estadísticas por mes: " + e.getMessage());
+    } finally {
+        if (con != null) {
+            conexionDB.cerrarConexion();
+        }
+    }
+
+    // Rellenar meses sin incidentes con 0
+    for (int mes = 1; mes <= 12; mes++) {
+        incidentesPorMes.putIfAbsent(mes, 0);
+    }
+
+    return incidentesPorMes;
+}
     public Incidente obtenerIncidentePorId(int idTicket) {
         Conexiondb conexion = new Conexiondb();
         Connection con = conexion.establecerConexion();
@@ -601,7 +647,7 @@ public class IncidenteDAO {
         return tiempoPromedio;
     }
     
-    public Map<Integer, Integer> obtenerIncidentesFinalizadosPorMes(int año, int idUsuario) {
+    /*public Map<Integer, Integer> obtenerIncidentesFinalizadosPorMes(int año, int idUsuario) {
     Map<Integer, Integer> incidentesPorMes = new HashMap<>();
     Conexiondb conexionDB = new Conexiondb();
     Connection con = null;
@@ -647,7 +693,7 @@ public class IncidenteDAO {
     }
 
     return incidentesPorMes;
-}
+}*/
     
 
 }

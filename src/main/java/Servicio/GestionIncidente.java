@@ -144,7 +144,8 @@ public class GestionIncidente {
         return tiempoFormateado;
     }
 
-    public Map<Integer, Integer> obtenerEstadisticasPorMes(int año, int idUsuario) {
-        return incidenteDAO.obtenerIncidentesFinalizadosPorMes(año, idUsuario);
-    }
+    public Map<Integer, Integer> obtenerEstadisticasPorMes(int año, int idEmpleado) {
+    return incidenteDAO.obtenerIncidentesFinalizadosPorMes(año, idEmpleado);
+}
+
 }

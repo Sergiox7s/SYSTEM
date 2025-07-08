@@ -1,5 +1,7 @@
 package Interfaz.SoporteEquipo;
 
+import Interfaz.Admin.VistaMetricas;
+import Modelo.Entidades.Empleado;
 import Modelo.Entidades.Usuario;
 import Servicio.GestionIncidente;
 import java.awt.Image;
@@ -16,12 +18,19 @@ public class VistaPersonal extends javax.swing.JFrame {
 
     private GestionIncidente gestionIncidente;
     private Usuario usuario;
+    private Empleado empleado;
+    private javax.swing.JFrame ventanaAnterior;
     private int añoActual = java.time.Year.now().getValue(); // Obtiene el año actual
 
-    public VistaPersonal(Usuario usuario) {
+    public VistaPersonal(Usuario usuario,Empleado empleado , javax.swing.JFrame ventanaAnterior) {
         this.usuario = usuario;
+        this.empleado = empleado;
+        this.ventanaAnterior = ventanaAnterior;
         this.gestionIncidente = new GestionIncidente();
         initComponents();
+        if (empleado != null) {
+            jLabelTitulo.setText("Reporte Anual - " + empleado.getNombre() + " " + empleado.getApellido());
+        }
 
         panelGrafico.setLayout(new java.awt.BorderLayout());
         panelGrafico.setPreferredSize(new java.awt.Dimension(600, 400));
@@ -31,7 +40,8 @@ public class VistaPersonal extends javax.swing.JFrame {
 
     private void cargarEstadisticas() {
         try {
-            Map<Integer, Integer> estadisticas = gestionIncidente.obtenerEstadisticasPorMes(añoActual, usuario.getId());
+             int idParaConsulta = (empleado != null) ? empleado.getIdEmpleado() : usuario.getId();
+        Map<Integer, Integer> estadisticas = gestionIncidente.obtenerEstadisticasPorMes(añoActual, idParaConsulta);
 
             int total = estadisticas.values().stream().mapToInt(Integer::intValue).sum();
 
@@ -85,6 +95,11 @@ public class VistaPersonal extends javax.swing.JFrame {
         for (int mes = 1; mes <= 12; mes++) {
             dataset.addValue(estadisticas.getOrDefault(mes, 0), "Incidentes", meses[mes - 1]);
         }
+        
+        //NUEVO: Título personalizado con nombre de empleado
+        String titulo = (empleado != null) 
+                ? "Incidentes de " + empleado.getNombre() + " - Año " + añoActual
+                : "Incidentes Completados por Mes - Año " + añoActual;
 
         JFreeChart chart = ChartFactory.createBarChart(
                 "Incidentes Completados por Mes - Año " + añoActual,
@@ -128,6 +143,7 @@ public class VistaPersonal extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
+        jLabelTitulo = new javax.swing.JLabel();
         campoEnero = new javax.swing.JTextField();
         campoFebrero = new javax.swing.JTextField();
         campoMarzo = new javax.swing.JTextField();
@@ -187,6 +203,9 @@ public class VistaPersonal extends javax.swing.JFrame {
 
         jLabel13.setText("DICIEMBRE %");
         jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(49, 444, 78, 29));
+
+        jLabelTitulo.setText("jLabel15");
+        jPanel1.add(jLabelTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 30, -1, -1));
 
         campoEnero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -367,12 +386,15 @@ public class VistaPersonal extends javax.swing.JFrame {
 
     private void regresarAVistaAnterior() {
         // Cierra la ventana actual
-        this.dispose();
-
-        // Crea y muestra la ventana anterior (VistaEmpleado)
-        VistaEmpleado vistaAnterior = new VistaEmpleado(this.usuario);
-        vistaAnterior.setVisible(true);
-        vistaAnterior.setLocationRelativeTo(null);
+        this.dispose(); // Cierra la ventana actual
+    
+        if (ventanaAnterior != null) {
+            ventanaAnterior.setVisible(true); // Muestra la ventana anterior
+            ventanaAnterior.setLocationRelativeTo(null); // Centra la ventana
+        } else {
+            // Si no hay ventana anterior definida, abre VistaMetricas por defecto
+            new VistaMetricas(this.usuario).setVisible(true);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -403,6 +425,7 @@ public class VistaPersonal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel panelGrafico;
     // End of variables declaration//GEN-END:variables

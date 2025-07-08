@@ -2,6 +2,7 @@ package Interfaz.Admin;
 
 import Servicio.GestionEmpleado;
 import Interfaz.LoginPanel;
+import Interfaz.SoporteEquipo.VistaPersonal;
 import Modelo.DAO.ActividadEmpleadoDAO;
 import Modelo.DAO.CategoriaDAO;
 import Modelo.Entidades.Categoria;
@@ -40,6 +41,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -67,6 +70,8 @@ public class VistaMetricas extends javax.swing.JFrame {
             if (!e.getValueIsAdjusting() && tableListaEmpleado.getSelectedRow() != -1) {
                 mostrarMetricaEmpleado();
                 mostrarHistorialEmpleado();
+                
+                mostrarMetricaIncidentes();
             }
         });
         SetImageLabel(jLabel1, "/Img/fondoBlanco.jpg");
@@ -77,19 +82,35 @@ public class VistaMetricas extends javax.swing.JFrame {
     }
 
     private void mostrarMetricaIncidentes() {
-        int totalIncidentes = gestionIncidente.obtenerTotalIncidentes();
-        int totalIncidentesDia = gestionIncidente.obtenerTotalIncidentesDia();
-        int incidentesEnCurso = gestionIncidente.obtenerIncidentesEnCurso();
-        int empleadosDisponibles = gestionIncidente.obtenerEmpleadosDisponibles();
-        String tiempoPromedio = gestionIncidente.obtenerTiempoPromedio();
+    try {
+        // Usar SwingWorker para no bloquear la interfaz
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                // Obtener datos frescos
+                int totalIncidentes = gestionIncidente.obtenerTotalIncidentes();
+                int totalIncidentesDia = gestionIncidente.obtenerTotalIncidentesDia();
+                int incidentesEnCurso = gestionIncidente.obtenerIncidentesEnCurso();
+                int empleadosDisponibles = gestionIncidente.obtenerEmpleadosDisponibles();
+                String tiempoPromedio = gestionIncidente.obtenerTiempoPromedio();
 
-        textIncidentes.setText(String.valueOf(totalIncidentes));
-        textIncidentesDia.setText(String.valueOf(totalIncidentesDia));
-        textIncidenteAsignado.setText(String.valueOf(incidentesEnCurso));
-        textTotalEmpleadosDisponibles.setText(String.valueOf(empleadosDisponibles));
-        textTiempoPromedio.setText(tiempoPromedio);
-
+                // Actualizar UI en el hilo de eventos
+                SwingUtilities.invokeLater(() -> {
+                    textIncidentes.setText(String.valueOf(totalIncidentes));
+                    textIncidentesDia.setText(String.valueOf(totalIncidentesDia));
+                    textIncidenteAsignado.setText(String.valueOf(incidentesEnCurso));
+                    textTotalEmpleadosDisponibles.setText(String.valueOf(empleadosDisponibles));
+                    textTiempoPromedio.setText(tiempoPromedio);
+                });
+                return null;
+            }
+        }.execute();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, 
+            "Error al actualizar métricas: " + e.getMessage(),
+            "Error", JOptionPane.ERROR_MESSAGE);
     }
+}
 
     private void mostrarMetricaEmpleado() {
         int filaSeleccionada = tableListaEmpleado.getSelectedRow();
@@ -152,6 +173,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         lbVistaColaIncidentes = new javax.swing.JLabel();
         lbVistaMetricas = new javax.swing.JLabel();
         lbVistaHistorial = new javax.swing.JLabel();
+        lbVistaColaIncidentes1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -202,7 +224,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         jLabel14.setFont(new java.awt.Font("Poppins", 0, 22)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Control de Incidencias");
-        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(53, 0, 390, 70));
+        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 0, 390, 70));
 
         jLabel9.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
@@ -239,7 +261,7 @@ public class VistaMetricas extends javax.swing.JFrame {
                 lbVistaColaIncidentesMouseClicked(evt);
             }
         });
-        jPanel3.add(lbVistaColaIncidentes, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, 130, 70));
+        jPanel3.add(lbVistaColaIncidentes, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 0, 130, 70));
 
         lbVistaMetricas.setBackground(new java.awt.Color(0, 102, 204));
         lbVistaMetricas.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -254,7 +276,7 @@ public class VistaMetricas extends javax.swing.JFrame {
                 lbVistaMetricasMouseClicked(evt);
             }
         });
-        jPanel3.add(lbVistaMetricas, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 0, 120, 70));
+        jPanel3.add(lbVistaMetricas, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, 120, 70));
 
         lbVistaHistorial.setBackground(new java.awt.Color(0, 102, 204));
         lbVistaHistorial.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
@@ -269,6 +291,18 @@ public class VistaMetricas extends javax.swing.JFrame {
             }
         });
         jPanel3.add(lbVistaHistorial, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 0, 120, 70));
+
+        lbVistaColaIncidentes1.setFont(new java.awt.Font("Poppins", 0, 14)); // NOI18N
+        lbVistaColaIncidentes1.setForeground(new java.awt.Color(255, 255, 255));
+        lbVistaColaIncidentes1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbVistaColaIncidentes1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/6 (24).png"))); // NOI18N
+        lbVistaColaIncidentes1.setText("Anual");
+        lbVistaColaIncidentes1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbVistaColaIncidentes1MouseClicked(evt);
+            }
+        });
+        jPanel3.add(lbVistaColaIncidentes1, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 0, 130, 70));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -944,6 +978,33 @@ public class VistaMetricas extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btExportarExcelActionPerformed
 
+    private void lbVistaColaIncidentes1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbVistaColaIncidentes1MouseClicked
+        // ACA PONER PRIMERO QUE SE SELECCIONE UNA FILA DE LA TABLA 2 
+        int filaSeleccionada = tableListaEmpleado.getSelectedRow();
+    
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this, 
+            "Por favor seleccione un empleado de la tabla primero", 
+            "Advertencia", 
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    String nombreCompleto = tableListaEmpleado.getValueAt(filaSeleccionada, 0).toString();
+    Empleado empleadoSeleccionado = gestionEmpleado.obtenerDetallesEmpleado(nombreCompleto);
+    
+    if (empleadoSeleccionado != null) {
+        Usuario usuarioEmpleado = gestionEmpleado.obtenerUsuarioPorEmpleado(empleadoSeleccionado.getIdEmpleado());
+        
+        // Pasar "this" como referencia a la ventana actual (VistaMetricas)
+        VistaPersonal vp = new VistaPersonal(usuarioEmpleado, empleadoSeleccionado, this);
+        this.setVisible(false); // Opcional: ocultar la ventana actual en lugar de cerrarla
+        vp.setVisible(true);
+        vp.setLocationRelativeTo(null);
+    } 
+        
+    }//GEN-LAST:event_lbVistaColaIncidentes1MouseClicked
+
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));
         Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
@@ -984,6 +1045,7 @@ public class VistaMetricas extends javax.swing.JFrame {
     private javax.swing.JLabel lbNomUsuario;
     private javax.swing.JLabel lbSalirSistema;
     private javax.swing.JLabel lbVistaColaIncidentes;
+    private javax.swing.JLabel lbVistaColaIncidentes1;
     private javax.swing.JLabel lbVistaHistorial;
     private javax.swing.JLabel lbVistaMetricas;
     private javax.swing.JTable tableHistorial;

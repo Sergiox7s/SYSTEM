@@ -4,11 +4,17 @@
  */
 package Servicio;
 
+import Modelo.Conexion.Conexiondb;
 import Modelo.DAO.ActividadEmpleadoDAO;
 import Modelo.DAO.CategoriaDAO;
 import Modelo.DAO.EmpleadoDAO;
 import Modelo.Entidades.Categoria;
 import Modelo.Entidades.Empleado;
+import Modelo.Entidades.Usuario;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -66,4 +72,32 @@ public class GestionEmpleado {
 
         return actividadEmpleadoDAO.mostrarHistorialPorEmpleado(idEmpleado);
     }
+
+    public Usuario obtenerUsuarioPorEmpleado(int idEmpleado) {
+        Conexiondb conexion = new Conexiondb();
+        Connection con = conexion.establecerConexion();
+        Usuario usuario = null;
+
+        if (con != null) {
+            String query = "SELECT u.* FROM usuario u JOIN empleado e ON u.id_usuario = e.id_usuario WHERE e.id_empleado = ?";
+            try (PreparedStatement ps = con.prepareStatement(query)) {
+                ps.setInt(1, idEmpleado);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    usuario = new Usuario();
+                    usuario.setId(rs.getInt("id_usuario"));
+                    usuario.setNombre(rs.getString("nombre"));
+                    usuario.setApellido(rs.getString("apellido"));
+                    // Otros campos necesarios
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                conexion.cerrarConexion();
+            }
+        }
+        return usuario;
+    }
+
 }
