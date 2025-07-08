@@ -1,0 +1,5 @@
+# Ignorar archivos compilados
+target/classes/**/*.class
+
+# Mantener las imágenes (NO ignorar Img/)
+!target/classes/Img/
