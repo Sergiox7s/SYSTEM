@@ -214,6 +214,7 @@ public class VistaMetricas extends javax.swing.JFrame {
         jSeparator18 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
         btExportarExcel = new javax.swing.JButton();
+        btExportarPDF1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -715,6 +716,20 @@ public class VistaMetricas extends javax.swing.JFrame {
         });
         jPanel2.add(btExportarExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 210, 40));
 
+        btExportarPDF1.setBackground(new java.awt.Color(255, 0, 0));
+        btExportarPDF1.setForeground(new java.awt.Color(255, 255, 255));
+        btExportarPDF1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/75 (12).png"))); // NOI18N
+        btExportarPDF1.setText("[PDF] DE EMPLEADO");
+        btExportarPDF1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btExportarPDF1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btExportarPDF1.setFocusPainted(false);
+        btExportarPDF1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btExportarPDF1ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(btExportarPDF1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 30, 160, 40));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -791,8 +806,9 @@ public class VistaMetricas extends javax.swing.JFrame {
             String nombreArchivo = nombreCompleto.replaceAll("\\s+", "_");
 
             String userHome = System.getProperty("user.home");
-            String ruta = "D:\\Backup\\Escritorio\\" + "reporte_" + nombreArchivo + ".pdf";
-                //String ruta = userHome + File.separator + "Desktop" + File.separator + "reporte_" + nombreArchivo + ".pdf";
+          String ruta = userHome + File.separator + "Desktop" + File.separator + "reporte_" + nombreArchivo + ".pdf";
+
+                //"D:\\Backup\\Escritorio\\" + "reporte_" + nombreArchivo + ".pdf";
             
             
 
@@ -978,6 +994,7 @@ public class VistaMetricas extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btExportarExcelActionPerformed
 
+
     private void lbVistaColaIncidentes1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbVistaColaIncidentes1MouseClicked
         // ACA PONER PRIMERO QUE SE SELECCIONE UNA FILA DE LA TABLA 2 
         int filaSeleccionada = tableListaEmpleado.getSelectedRow();
@@ -1005,6 +1022,11 @@ public class VistaMetricas extends javax.swing.JFrame {
         
     }//GEN-LAST:event_lbVistaColaIncidentes1MouseClicked
 
+    private void btExportarPDF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExportarPDF1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btExportarPDF1ActionPerformed
+
+
     public void SetImageLabel(JLabel label, String path) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));
         Image img = icon.getImage().getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH);
@@ -1014,6 +1036,7 @@ public class VistaMetricas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btExportarExcel;
     private javax.swing.JButton btExportarPDF;
+    private javax.swing.JButton btExportarPDF1;
     private javax.swing.JComboBox<Categoria> cbCategoria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

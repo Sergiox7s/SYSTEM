@@ -214,6 +214,7 @@ public class LoginPanel extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(this, "Inicio de sesión exitoso", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
                 Main.usuario = u; // Asignar el empleado autenticado a Main.empleado
+                
 
                 if (u.getRol().equals("admin")) {
                     
