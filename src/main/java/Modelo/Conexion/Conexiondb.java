@@ -9,8 +9,8 @@ public class Conexiondb {
     Connection conectar = null;
 
     String usuario = "root";
-   //String pass = "180701";
-    String pass="75000454jd";
+    String pass = "180701";
+   // String pass="75000454jd";
     
     String bd = "sistemaIncidencias";
     String ip = "127.0.0.1";
