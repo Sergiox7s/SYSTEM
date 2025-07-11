@@ -11,9 +11,14 @@ import Modelo.Entidades.Empleado;
 import Modelo.Entidades.Incidente;
 import Modelo.Entidades.Usuario;
 import Servicio.GestionIncidente;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import static com.itextpdf.text.Font.FontFamily.HELVETICA;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Desktop;
 import java.awt.Image;
@@ -25,6 +30,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.ImageIcon;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -310,7 +316,7 @@ public class VistaEmpleado extends java.awt.Frame {
         lbFecha.setText("jLabel5");
         jPanel1.add(lbFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 140, 30));
 
-        jLabel9.setText("DEVOLVER");
+        jLabel9.setText("RETORNAR");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(1000, 350, -1, -1));
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/tecnicos.jpg"))); // NOI18N
@@ -412,16 +418,15 @@ public class VistaEmpleado extends java.awt.Frame {
     }//GEN-LAST:event_btnFinalizarActionPerformed
 
     private void btPersonalPDFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPersonalPDFActionPerformed
-       try {
-        Main.usuario = u;
+      try {
+    int idUsuario = Main.usuario.getId(); 
 
     Connection conexion = DriverManager.getConnection(
         "jdbc:mysql://localhost:3306/sistemaIncidencias", "root", "180701"
     );
 
-    String sqlEmpleado = "SELECT id_empleado, nombre, apellido FROM empleado WHERE id_usuario = ?";
+    String sqlEmpleado = "SELECT id_empleado, nombre, apellido, celular FROM empleado WHERE id_usuario = ?";
     PreparedStatement psEmpleado = conexion.prepareStatement(sqlEmpleado);
-           int idUsuario = 10;
     psEmpleado.setInt(1, idUsuario);
     ResultSet rsEmpleado = psEmpleado.executeQuery();
 
@@ -429,49 +434,71 @@ public class VistaEmpleado extends java.awt.Frame {
         int idEmpleado = rsEmpleado.getInt("id_empleado");
         String nombre = rsEmpleado.getString("nombre");
         String apellido = rsEmpleado.getString("apellido");
+        String celular = rsEmpleado.getString("celular");
 
-        String sqlMetricas = "SELECT COUNT(*) AS total, " +
-                             "SUM(CASE WHEN i.fecha_hora_finalizado IS NOT NULL THEN 1 ELSE 0 END) AS finalizados " +
-                             "FROM incidente i WHERE i.id_empleado_asignado = ?";
+        Document document = new Document();
+        String nombreArchivo = "metrica_" + nombre + "_" + apellido + ".pdf";
+        String rutaPDF = System.getProperty("user.home") + "\\Downloads\\" + nombreArchivo;
 
-        PreparedStatement psMetricas = conexion.prepareStatement(sqlMetricas);
-        psMetricas.setInt(1, idEmpleado);
-        ResultSet rsMetricas = psMetricas.executeQuery();
+        PdfWriter.getInstance(document, new FileOutputStream(rutaPDF));
+        document.open();
 
-        if (rsMetricas.next()) {
-            int totalAsignados = rsMetricas.getInt("total");
-            int totalFinalizados = rsMetricas.getInt("finalizados");
+        Font tituloFont = new Font(Font.FontFamily.HELVETICA, 22, Font.BOLD, BaseColor.RED);
+        Font normalFont = new Font(Font.FontFamily.HELVETICA, 14);
+        Font negritaFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.RED);
+        Font fechaFont = new Font(Font.FontFamily.HELVETICA, 11, Font.ITALIC, BaseColor.BLUE);
 
-            // 🟣 Crear PDF con estilo
-            Document document = new Document();
-            String nombreArchivo = "metrica_" + nombre + "_" + apellido + ".pdf";
-            String rutaPDF = System.getProperty("user.home") + "\\Downloads\\" + nombreArchivo;
+        Paragraph titulo = new Paragraph("REPORTE MÉTRICA PERSONAL", tituloFont);
+        titulo.setAlignment(Element.ALIGN_CENTER);
+        document.add(titulo);
+        document.add(Chunk.NEWLINE);
 
-            PdfWriter.getInstance(document, new FileOutputStream(rutaPDF));
-            document.open();
+        LocalDateTime ahora = LocalDateTime.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy ' ['HH:mm:ss']'");
+        Paragraph fecha = new Paragraph("Fecha y hora de generación: " + ahora.format(formato), fechaFont);
+        fecha.setAlignment(Element.ALIGN_RIGHT);
+        document.add(fecha);
+        document.add(Chunk.NEWLINE);
 
-            Font tituloFont = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
-            Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL);
-            Font negritaFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD);
+        document.add(new Paragraph("Nombre del técnico:", negritaFont));
+        document.add(new Paragraph(nombre + " " + apellido, normalFont));
+        document.add(Chunk.NEWLINE);
+        document.add(new Paragraph("ID del Empleado: ", negritaFont));
+        document.add(new Paragraph("" +idEmpleado, normalFont));
 
-            Paragraph titulo = new Paragraph("MÉTRICA PERSONAL DEL TÉCNICO\n\n", tituloFont);
-            titulo.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(titulo);
+        document.add(Chunk.NEWLINE);
+        document.add(new Paragraph("Celular: ", negritaFont));
+        document.add(new Paragraph("" +celular, normalFont));
 
-            document.add(new Paragraph("Nombre del técnico: ", negritaFont));
-            document.add(new Paragraph(nombre + " " + apellido + "\n", normalFont));
+        document.add(Chunk.NEWLINE);
+        document.add(Chunk.NEWLINE);
 
-            document.add(new Paragraph("Tickets asignados: ", negritaFont));
-            document.add(new Paragraph(String.valueOf(totalAsignados) + "\n", normalFont));
+        // Tickets Finalizados
+        document.add(new Paragraph("Tickets Finalizados:", negritaFont));
+        document.add(Chunk.NEWLINE);
 
-            document.add(new Paragraph("Tickets finalizados: ", negritaFont));
-            document.add(new Paragraph(String.valueOf(totalFinalizados) + "\n", normalFont));
+        PdfPTable tablaFinalizados = new PdfPTable(2);
+         Font RojoFont = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD, BaseColor.RED);
 
-            document.close();
 
-            // 🟢 Abrir PDF automáticamente
-            Desktop.getDesktop().open(new File(rutaPDF));
+        tablaFinalizados.setWidthPercentage(100);
+        tablaFinalizados.addCell("ID Incidente");
+        tablaFinalizados.addCell("Descripción");
+
+        String sqlFinalizados = "SELECT id_incidente, descripcion FROM incidente WHERE id_empleado_asignado = ? AND fecha_hora_finalizado IS NOT NULL";
+        PreparedStatement psFinalizados = conexion.prepareStatement(sqlFinalizados);
+        psFinalizados.setInt(1, idEmpleado);
+        ResultSet rsFinalizados = psFinalizados.executeQuery();
+        
+        while (rsFinalizados.next()) {
+            tablaFinalizados.addCell(String.valueOf(rsFinalizados.getInt("id_incidente")));
+            tablaFinalizados.addCell(rsFinalizados.getString("descripcion"));
         }
+
+        document.add(tablaFinalizados);
+        document.close();
+
+        Desktop.getDesktop().open(new File(rutaPDF));
     } else {
         JOptionPane.showMessageDialog(null, "No se encontró un empleado con ese usuario.");
     }
@@ -484,6 +511,12 @@ public class VistaEmpleado extends java.awt.Frame {
 
     }//GEN-LAST:event_btPersonalPDFActionPerformed
 
+    
+    
+    
+    
+    
+    
     private void btnFinalizar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFinalizar1ActionPerformed
                                                      
     int selectedRow = tableTicketActual.getSelectedRow();
