@@ -128,6 +128,15 @@ public class Empleado {
         this.promedioRespuesta = promedioRespuesta;
     }
 
+    public int getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
+    }
+    
+
     @Override
     public String toString() {
         return nombre + " " + apellido;

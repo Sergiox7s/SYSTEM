@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 public class CategoriaDAO {
+
     // Consultas SQL
     private final String OBTENER_ID_CATEGORIA = "SELECT id_categoria FROM categoria WHERE nombre = ?";
     private final String LISTAR_CATEGORIAS = "SELECT * FROM categoria";
@@ -35,7 +36,7 @@ public class CategoriaDAO {
             stmt = con.prepareStatement(OBTENER_ID_CATEGORIA);
             stmt.setString(1, nombreCategoria);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 idCategoria = rs.getInt("id_categoria");
             }
@@ -59,7 +60,7 @@ public class CategoriaDAO {
             stmt = con.prepareStatement(OBTENER_CATEGORIA_POR_ID);
             stmt.setInt(1, idCategoria);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 nombre = rs.getString("nombre");
             }
@@ -83,7 +84,7 @@ public class CategoriaDAO {
             stmt = con.prepareStatement(OBTENER_CATEGORIA_POR_EMPLEADO);
             stmt.setInt(1, idEmpleado);
             rs = stmt.executeQuery();
-            
+
             if (rs.next()) {
                 categoria = rs.getString("nombre");
             }
@@ -124,9 +125,15 @@ public class CategoriaDAO {
     // Método para cerrar recursos (sobrecargado)
     private void cerrarRecursos(Connection con, PreparedStatement stmt, ResultSet rs) {
         try {
-            if (rs != null) rs.close();
-            if (stmt != null) stmt.close();
-            if (con != null) conexion.cerrarConexion();
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+            if (con != null) {
+                conexion.cerrarConexion();
+            }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Error al cerrar recursos: " + e.getMessage());
         }
@@ -135,4 +142,103 @@ public class CategoriaDAO {
     private void cerrarRecursos(Connection con, PreparedStatement stmt) {
         cerrarRecursos(con, stmt, null);
     }
+
+    public boolean agregarCategoria(Categoria categoria) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean resultado = false;
+
+        try {
+            con = conexion.establecerConexion();
+            stmt = con.prepareStatement("INSERT INTO categoria (nombre) VALUES (?)", 
+                                       PreparedStatement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, categoria.getNombre());
+            
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                rs = stmt.getGeneratedKeys();
+                if (rs.next()) {
+                    categoria.setIdCategoria(rs.getInt(1));
+                    resultado = true;
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al agregar categoría: " + e.getMessage());
+        } finally {
+            cerrarRecursos(con, stmt, rs);
+        }
+        return resultado;
+    }
+
+    public boolean actualizarCategoria(Categoria categoria) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        boolean resultado = false;
+
+        try {
+            con = conexion.establecerConexion();
+            stmt = con.prepareStatement("UPDATE categoria SET nombre = ? WHERE id_categoria = ?");
+            stmt.setString(1, categoria.getNombre());
+            stmt.setInt(2, categoria.getIdCategoria());
+            
+            int affectedRows = stmt.executeUpdate();
+            resultado = affectedRows > 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar categoría: " + e.getMessage());
+        } finally {
+            cerrarRecursos(con, stmt);
+        }
+        return resultado;
+    }
+
+    public boolean eliminarCategoria(int id) {
+        Connection con = null;
+        PreparedStatement stmt = null;
+        boolean resultado = false;
+
+        try {
+            con = conexion.establecerConexion();
+            stmt = con.prepareStatement("DELETE FROM categoria WHERE id_categoria = ?");
+            stmt.setInt(1, id);
+            
+            int affectedRows = stmt.executeUpdate();
+            resultado = affectedRows > 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar categoría: " + e.getMessage());
+        } finally {
+            cerrarRecursos(con, stmt);
+        }
+        return resultado;
+    }
+    
+  
+    public Categoria obtenerCategoriaPorId(int id) {
+    Categoria categoria = null;
+    Connection con = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+
+    try {
+        con = conexion.establecerConexion();
+        stmt = con.prepareStatement("SELECT * FROM categoria WHERE id_categoria = ?");
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            categoria = new Categoria();
+            categoria.setIdCategoria(rs.getInt("id_categoria"));
+            categoria.setNombre(rs.getString("nombre"));
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Error al obtener categoría: " + e.getMessage());
+    } finally {
+        cerrarRecursos(con, stmt, rs);
+    }
+    return categoria;
+}
+    
+    
+    
+    
 }

@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class UsuarioDAO {
@@ -75,5 +77,125 @@ public class UsuarioDAO {
         }
         return usuario;
     }
+    
+    
+    public boolean registrarUsuario(Usuario usuario) {
+        String sql = "INSERT INTO usuario (nombre, apellido, correo, contrasena, rol) VALUES (?, ?, ?, ?, ?)";
+        
+        try (Connection con = cn.establecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            
+            ps.setString(1, usuario.getNombre());
+            ps.setString(2, usuario.getApellido());
+            ps.setString(3, usuario.getCorreo());
+            ps.setString(4, usuario.getContrasena());
+            ps.setString(5, usuario.getRol());
+            
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        usuario.setId(rs.getInt(1));
+                    }
+                }
+                return true;
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al registrar usuario: " + e.getMessage());
+        }
+        return false;
+    }
 
+    // READ - Obtener usuario por ID
+    public Usuario obtenerUsuarioPorId(int id) {
+        String sql = "SELECT * FROM usuario WHERE id_usuario = ?";
+        Usuario usuario = null;
+        
+        try (Connection con = cn.establecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    usuario = new Usuario();
+                    usuario.setId(rs.getInt("id_usuario"));
+                    usuario.setNombre(rs.getString("nombre"));
+                    usuario.setApellido(rs.getString("apellido"));
+                    usuario.setCorreo(rs.getString("correo"));
+                    usuario.setContrasena(rs.getString("contrasena"));
+                    usuario.setRol(rs.getString("rol"));
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener usuario: " + e.getMessage());
+        }
+        return usuario;
+    }
+
+    // READ - Obtener todos los usuarios
+    public List<Usuario> obtenerTodosUsuarios() {
+        String sql = "SELECT * FROM usuario";
+        List<Usuario> usuarios = new ArrayList<>();
+        
+        try (Connection con = cn.establecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            
+            while (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("id_usuario"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setApellido(rs.getString("apellido"));
+                usuario.setCorreo(rs.getString("correo"));
+                usuario.setContrasena(rs.getString("contrasena"));
+                usuario.setRol(rs.getString("rol"));
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener usuarios: " + e.getMessage());
+        }
+        return usuarios;
+    }
+
+    // UPDATE - Actualizar usuario
+    public boolean actualizarUsuario(Usuario usuario) {
+        String sql = "UPDATE usuario SET nombre = ?, apellido = ?, correo = ?, contrasena = ?, rol = ? WHERE id_usuario = ?";
+        
+        try (Connection con = cn.establecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setString(1, usuario.getNombre());
+            ps.setString(2, usuario.getApellido());
+            ps.setString(3, usuario.getCorreo());
+            ps.setString(4, usuario.getContrasena());
+            ps.setString(5, usuario.getRol());
+            ps.setInt(6, usuario.getId());
+            
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar usuario: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // DELETE - Eliminar usuario
+    public boolean eliminarUsuario(int id) {
+        String sql = "DELETE FROM usuario WHERE id_usuario = ?";
+        
+        try (Connection con = cn.establecerConexion();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            
+            ps.setInt(1, id);
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar usuario: " + e.getMessage());
+        }
+        return false;
+    }
+
+    
+    
+    
 }
